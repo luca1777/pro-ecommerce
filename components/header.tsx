@@ -1,9 +1,10 @@
-
 import Link from 'next/link';
 import "../styles/global.css";
 
 
 function Navigation() {
+
+
   return (
     <nav className='flex flex-col md:flex-row items-center justify-between ' >
       <span>Meniu Mobile</span>

@@ -4,7 +4,7 @@ import "../styles/global.css";
 import Layout from "@/components/Layout";
 
 const Store = () => {
-  const [products, setProducts] = useState<any>([]);
+  const [products, setProducts] = useState<Product[]>([]);
 
   const WooCommerce = axios.create({
     baseURL: "https://apollo.code-village.ro/wp-json/wc/v3", // Replace with your store's URL
