@@ -4,7 +4,8 @@ import Layout from '@/components/Layout'
 const ProductPage = ({params}) => { 
     console.log(params)
   return (
-    <Layout>123</Layout>
+    <Layout>123
+    sadssadasdas</Layout>
   )
 }
 
