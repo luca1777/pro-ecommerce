@@ -5,7 +5,6 @@ import axios from "axios";
 const ProductPage = ({productId}) => {
 
 
-
     const WooCommerce = axios.create({
         baseURL: "https://apollo.code-village.ro/wp-json/wc/v3", // Replace with your store's URL
         auth: {
