@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import "../styles/global.css";
-import Layout from "@/components/Layout";
 import Link from "next/link";
 import Image from "next/image";
 
 const Store = ({data}) => {
     return (
-        <Layout>
+        <div>
             <div className="flex justify-center gap-12 ">
                 {data.map((product) => (
                     <div key={product.id}>
@@ -21,7 +20,7 @@ const Store = ({data}) => {
                     </div>
                 ))}
             </div>
-        </Layout>
+        </div>
     );
 
 };

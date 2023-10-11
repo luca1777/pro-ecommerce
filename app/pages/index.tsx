@@ -1,13 +1,12 @@
 import React from 'react'
-import Layout from '../components/Layout';
 import "../styles/global.css";
 
 const Home = () => {
     return (
-        <Layout>
-          <h1>Continut Home Page</h1>
+        <div>
+          <p>Continut Home Page</p>
           {/* Add your home page content here */}
-        </Layout>
+        </div>
       );
     }
 
