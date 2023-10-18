@@ -2,38 +2,15 @@ import React from 'react'
 import TShirt from "./assets/tricou-tommy.webp"
 import Link from 'next/link'
 import Image from 'next/image'
+import {getProducts} from "@/app/utils";
 
-
-const getData = async () => {
-  const baseURL = "https://apollo.code-village.ro/wp-json/wc/v3";
-  const username = "ck_3d06586e1a83d260041f72db0404f0ca5102f1f7";
-  const password = "cs_3e7b2d095ecf51ec04a162882e3dd595eaab9cbd";
-  
-  
-  try {
-    const res = await fetch(`${baseURL}/products`, {
-      method: "GET",
-      headers: {
-        "Authorization": `Basic ${btoa(username + ":" + password)}`
-    }
-    });
-
-    if (!res.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    return await res.json();
-    
-  } catch (error) {
-    console.error("There was an error fetching the data", error);
-    return [];
-  }
-}
 
 
 
 const Home = async () => {
-  const data = await getData();
+
+  const data = await getProducts();
+
   return (
     <main>
       {/* Hero section*/}
@@ -75,9 +52,9 @@ const Home = async () => {
       {/* Carousel section */}
       <div className="w-full overflow-x-auto pb-6 pt-1 custom-scrollbar">
         <ul className='flex animate-carousel gap-4'>
-          {data.map((product) => (
+          {data?.map((product) => (
             <li key={product.id} className='relative max-h-[275px] w-[65%] max-w-[425px] flex-none'>
-              <Link href="/" className='relative h-full w-full'>
+              <Link href={`/product/${product.id}`} className='relative h-full w-full'>
                 <div className='group flex h-full w-full items-center justify-center overflow-hidden rounded-lg border bg-white hover:border-blue-600 relative border-neutral-200'>
                   <Image
                     width={900}
