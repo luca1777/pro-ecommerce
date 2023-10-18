@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react'
+import Layout from '@/components/Layout'
 import axios from "axios";
 
 const ProductPage = ({productId}) => {
@@ -23,7 +24,7 @@ const ProductPage = ({productId}) => {
     }, []);
 
     return (
-    <div>{productId}</div>
+    <Layout>{productId}</Layout>
   )
 }
 
