@@ -24,7 +24,7 @@ export const getProducts = async () => {
     }
 
 
-}
+} 
 
 
 const getSingleProduct = async () => {
