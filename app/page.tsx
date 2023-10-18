@@ -2,18 +2,16 @@ import React from 'react'
 import TShirt from "./assets/tricou-tommy.webp"
 import Link from 'next/link'
 import Image from 'next/image'
-import { DateTime } from "luxon";
 
 
 const getData = async () => {
-  const currentTime = DateTime.now().toFormat("yyyy-mm-ddThh:mm:ssZ")
   const baseURL = "https://apollo.code-village.ro/wp-json/wc/v3";
   const username = "ck_3d06586e1a83d260041f72db0404f0ca5102f1f7";
   const password = "cs_3e7b2d095ecf51ec04a162882e3dd595eaab9cbd";
   
   
   try {
-    const res = await fetch(`${baseURL}/products?${currentTime}`, {
+    const res = await fetch(`${baseURL}/products`, {
       method: "GET",
       headers: {
         "Authorization": `Basic ${btoa(username + ":" + password)}`
@@ -36,7 +34,6 @@ const getData = async () => {
 
 const Home = async () => {
   const data = await getData();
-  console.log(data);
   return (
     <main>
       {/* Hero section*/}
@@ -105,4 +102,4 @@ const Home = async () => {
   );
 }
 
-export default Home
+export default Home;
