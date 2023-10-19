@@ -31,9 +31,6 @@ const Product = async ({ params, searchParams}: ProductProps) => {
         await createOrder(prodId)
     }
 
-
-
-
     return (
       <div>
         {dataProduct.name}
