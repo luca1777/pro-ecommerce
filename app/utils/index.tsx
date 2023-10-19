@@ -3,27 +3,21 @@ import axios from "axios";
 const baseURL = "https://apollo.code-village.ro/wp-json/wc/v3";
 const username = "ck_3d06586e1a83d260041f72db0404f0ca5102f1f7";
 const password = "cs_3e7b2d095ecf51ec04a162882e3dd595eaab9cbd";
-
+const config = {
+    params: {
+        consumer_key: username,
+        consumer_secret: password,
+    }
+}
 
 export const getProducts = async () => {
-
     try{
-        const resData = await axios.get(`${baseURL}/products`,{
-            params: {
-                consumer_key: username,
-                consumer_secret: password,
-            }
-        })
-
-        console.log("util : " + resData.data)
-
+        const resData = await axios.get(`${baseURL}/products`, config)
         return resData.data;
     }catch (e) {
         console.log(e);
         return [];
     }
-
-
 }
 
 
