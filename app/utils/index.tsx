@@ -15,11 +15,11 @@ export const getProducts = async () => {
             }
         })
 
-        console.log("util : " + resData.data)
+        // console.log("util : " + resData.data)
 
         return resData.data;
     }catch (e) {
-        console.log(e);
+        // console.log(e);
         return [];
     }
 
@@ -27,11 +27,29 @@ export const getProducts = async () => {
 } 
 
 
-const getSingleProduct = async () => {
+export const getSingleProduct = async (prodId: number) => {
+    try{
+        const resData = await axios.get(`${baseURL}/products/${prodId}`,{
+            params: {
+                consumer_key: username,
+                consumer_secret: password,
+            }
+        })
 
+        console.log(resData.data)
+
+        return resData.data;
+
+    }catch (error) {
+        console.log(error);
+        return[];
+    }
 
 }
+
+
 const createOrder = async (prodId) => {
+
 
 }
 

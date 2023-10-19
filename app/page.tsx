@@ -50,7 +50,7 @@ const Home = async () => {
         </div>
       </div>
       {/* Carousel section */}
-      <div className="w-full overflow-x-auto pb-6 pt-1 custom-scrollbar">
+      <div className="w-full overflow-x-auto pb-6 pt-1 custom-scrollbar border-b border-gray-300">
         <ul className='flex animate-carousel gap-4'>
           {data?.map((product) => (
             <li key={product.id} className='relative max-h-[275px] w-[65%] max-w-[425px] flex-none'>
