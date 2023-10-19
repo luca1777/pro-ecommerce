@@ -55,6 +55,21 @@ const config = {
 };
 
 export const createOrder = async (prodId: number) => {
+
+    console.log("action -> create order")
+
+    const baseURL = "https://apollo.code-village.ro/wp-json/wc/v3";
+    const username = "ck_3d06586e1a83d260041f72db0404f0ca5102f1f7";
+    const password = "cs_3e7b2d095ecf51ec04a162882e3dd595eaab9cbd";
+
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Basic ${btoa(username + ":" + password)}`
+        }
+    };
+
+
     try {
         const resData = await axios.post(`${baseURL}/orders`, getData(prodId), config);
         console.log("Order created", resData.data)
