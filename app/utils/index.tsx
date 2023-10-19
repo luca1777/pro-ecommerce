@@ -47,51 +47,65 @@ export const getSingleProduct = async (prodId: number) => {
 
 }
 
+const config = {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Basic ${btoa(username + ":" + password)}`
+    }
+};
 
-const createOrder = async (prodId) => {
-
-
+export const createOrder = async (prodId: number) => {
+    try {
+        const resData = await axios.post(`${baseURL}/orders`, getData(prodId), config);
+        console.log("Order created", resData.data)
+        return resData;
+    } catch (error) {
+        console.log('There was an error creating the order:', error);
+        return [];
+    }
 }
 
 
-const data = {
+const getData = (productId: number) => {
+  return {
     payment_method: "bacs",
     payment_method_title: "Direct Bank Transfer",
     set_paid: true,
-    status:"completed",
+    status: "completed",
     billing: {
-        first_name: "John",
-        last_name: "Doe",
-        address_1: "969 Market",
-        address_2: "",
-        city: "San Francisco",
-        state: "CA",
-        postcode: "94103",
-        country: "US",
-        email: "john.doe@example.com",
-        phone: "(555) 555-5555"
+      first_name: "John",
+      last_name: "Doe",
+      address_1: "969 Market",
+      address_2: "",
+      city: "San Francisco",
+      state: "CA",
+      postcode: "94103",
+      country: "US",
+      email: "john.doe@example.com",
+      phone: "(555) 555-5555",
     },
     shipping: {
-        first_name: "John",
-        last_name: "Doe",
-        address_1: "969 Market",
-        address_2: "",
-        city: "San Francisco",
-        state: "CA",
-        postcode: "94103",
-        country: "US"
+      first_name: "John",
+      last_name: "Doe",
+      address_1: "969 Market",
+      address_2: "",
+      city: "San Francisco",
+      state: "CA",
+      postcode: "94103",
+      country: "US",
     },
     line_items: [
-        {
-            product_id: 61, // To be changed
-            quantity: 1
-        }
+      {
+        product_id: productId,
+        quantity: 1,
+      },
     ],
     shipping_lines: [
-        {
-            method_id: "flat_rate",
-            method_title: "Flat Rate",
-            total: "10.00"
-        }
-    ]
+      {
+        method_id: "flat_rate",
+        method_title: "Flat Rate",
+        total: "10.00",
+      },
+    ],
+  };
 };
