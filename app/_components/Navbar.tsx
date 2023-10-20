@@ -81,8 +81,8 @@ const Navbar = () => {
       <div
         className={
           menuOpen
-            ? "fixed left-0 top-0 w-full md:hidden h-screen p-4 bg-white transform translate-x-0 transition-transform ease-in-out duration-400"
-            : "fixed left-0 top-0 w-full md:hidden h-screen p-4 bg-white transform -translate-x-full transition-transform ease-in-out duration-300"
+            ? "fixed left-0 top-0 w-full md:hidden h-screen p-4 bg-white transform translate-x-0 transition-transform ease-in-out duration-400 z-10"
+            : "fixed left-0 top-0 w-full md:hidden h-screen p-4 bg-white transform -translate-x-full transition-transform ease-in-out duration-300 z-10"
         }
       >
         <button
