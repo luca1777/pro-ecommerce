@@ -1,11 +1,11 @@
 'use client';
 
 import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from './counterSlice';
+import counterReducer from './checkout';
 
-export const store = configureStore({
+export const store:any = configureStore({
     reducer: {
-        counter: counterReducer
+        checkout: counterReducer
     }
 })
 
