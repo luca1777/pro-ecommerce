@@ -16,7 +16,7 @@ const Navbar = () => {
 
 
   return (
-    <nav className="relative flex items-center justify-between p-4 md:px-6">
+    <nav className="relative flex items-center justify-between p-4">
       <div onClick={handleNav} className="block flex-none md:hidden">
         <button className="flex h-11 w-11 items-center justify-center rounded-md border border-gray-300 text-black transition-colors active:bg-gray-400">
           <AiOutlineMenu className="transition-all ease-in-out hover:scale-125" />
