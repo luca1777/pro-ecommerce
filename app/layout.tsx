@@ -5,6 +5,7 @@ import Navbar from './_components/Navbar'
 import Footer from './_components/Footer'
 import { ReduxProvider } from './_redux/provider'
 
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
