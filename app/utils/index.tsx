@@ -14,9 +14,8 @@ export const getProducts = async () => {
                 consumer_secret: password,
             }
         })
-
-        // console.log("util : " + resData.data)
-
+        
+        // console.log("util : " + resData.data.id)
         return resData.data;
     }catch (e) {
         // console.log(e);

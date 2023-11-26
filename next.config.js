@@ -3,6 +3,10 @@ const nextConfig = {}
 
 module.exports = {
     images: {
-      domains: ['apollo.code-village.ro'],
+        remotePatterns: [
+            { protocol: 'https', hostname: 'apollo.code-village.ro' },
+          ],
     },
   };
+
+
