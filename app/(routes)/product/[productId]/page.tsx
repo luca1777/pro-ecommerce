@@ -30,6 +30,15 @@ const Product = async ({ params, searchParams }: ProductProps) => {
   const dataProduct: ProductData = await getSingleProduct(productId);
   const data = await getProducts();
 
+  const handleAddToCart = () => {
+  //   todo add to redux store new line for item
+  //   items : [{ prodId; 1, prodName: ",,", price:23 }]
+
+  //   todo show cart modal
+
+
+  }
+
   return (
     <div>
       <div className="mx-auto max-w-screen-2xl px-4">
