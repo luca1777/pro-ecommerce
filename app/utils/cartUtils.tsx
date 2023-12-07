@@ -21,3 +21,4 @@ export const addToCart = (product: Product) => {
   
     localStorage.setItem('cart', JSON.stringify(cart));
 };
+
