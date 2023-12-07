@@ -8,12 +8,30 @@ import { FaRegUser } from "react-icons/fa6";
 import  Logo  from "../assets/logo.png"
 import Image from 'next/image';
 import Login from './Login';
-import { useCartQuantity } from '../utils/useCartQuantity';
+import { getTotalCartQuantity } from '../utils/cartUtils'; 
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
     const [isModalOpen, setModalOpen] = useState(false);
-    const cartQuantity = useCartQuantity();
+    const [cartQuantity, setCartQuantity] = useState(0);
+
+    useEffect(() => {
+        const updateCartQuantity = () => {
+            const totalQuantity = getTotalCartQuantity();
+            setCartQuantity(totalQuantity);
+        };
+
+        // Event listener for cart updates
+        window.addEventListener('cartUpdated', updateCartQuantity);
+
+        // Initial cart quantity update
+        updateCartQuantity();
+
+        // Cleanup
+        return () => {
+            window.removeEventListener('cartUpdated', updateCartQuantity);
+        };
+    }, []);
     
 
     const handleNav = ():void => {

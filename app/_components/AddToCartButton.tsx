@@ -1,10 +1,14 @@
 "use client"
 import React from 'react';
-import { addToCart } from '../utils/cartUtils'; 
+import { addToCart } from '../utils/cartUtils';
+import { useCartQuantity } from '../utils/useCartQuantity';
 
 const AddToCartButton = ({ product }) => {
+  const { setCartQuantity } = useCartQuantity();
+
   const handleAddToCart = () => {
     addToCart(product);
+    setCartQuantity(prevQuantity => prevQuantity + 1); // Update cart quantity
   };
 
   return (

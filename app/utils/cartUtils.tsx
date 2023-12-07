@@ -1,4 +1,4 @@
-
+"use client"
 interface Product {
     id: number;
 }
@@ -20,5 +20,12 @@ export const addToCart = (product: Product) => {
     }
   
     localStorage.setItem('cart', JSON.stringify(cart));
+    window.dispatchEvent(new Event('cartUpdated'));
 };
 
+
+export const getTotalCartQuantity = () => {
+    const storedCart = localStorage.getItem('cart');
+    const cartItems = storedCart ? JSON.parse(storedCart) : [];
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
+};
