@@ -29,3 +29,9 @@ export const getTotalCartQuantity = () => {
     const cartItems = storedCart ? JSON.parse(storedCart) : [];
     return cartItems.reduce((total, item) => total + item.quantity, 0);
 };
+
+export const getTotalCartPrice = () => {
+  const storedCart = localStorage.getItem("cart");
+  const cartItems = storedCart ? JSON.parse(storedCart) : [];
+  return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+};

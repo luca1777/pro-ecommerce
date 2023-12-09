@@ -4,14 +4,13 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { IoCloseOutline } from "react-icons/io5";
 
-const Login = ({ isOpen, onClose }) => {
-  if (!isOpen) return null;
+const Login = ({ closeModal }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
       <div className="bg-white max-w-md  mx-auto w-full p-6 rounded shadow-lg">
         <div className="flex flex-col items-stretch">
-          <button onClick={onClose} className="self-end text-lg font-bold">
+          <button onClick={closeModal} className="self-end text-lg font-bold">
             <IoCloseOutline size={28} />
           </button>
           <h2 className="text-2xl font-bold text-center mb-4">Sign in</h2>
