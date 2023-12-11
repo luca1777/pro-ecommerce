@@ -187,7 +187,7 @@ const Navbar = () => {
         </button>
       </div>
       { isModalLoginOpen && <Login closeModal={() => setModalLoginOpen(false)} />}
-      { isModalCartOpen && <Cart closeModal={closeModal}/>}
+      { isModalCartOpen && <Cart isModalCartOpen={isModalCartOpen} closeModal={closeModal}/>}
     </nav>
   );
 }

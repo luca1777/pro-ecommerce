@@ -6,6 +6,8 @@ import Image from 'next/image';
 import { LuMinus } from "react-icons/lu";
 import { LuPlus } from "react-icons/lu";
 import { getTotalCartPrice } from '../utils/cartUtils'; 
+import PlusCartButton from './PlusCartButton';
+import MinusCartButton from './MinusCartButton';
 
 interface Product {
   id: number;
@@ -17,22 +19,35 @@ interface Product {
   quantity: number,
 }
 
-const Cart = ({ closeModal }) => {
+const Cart = ({ isModalCartOpen, closeModal }) => {
   const [cartItems, setCartItems] = useState<Product[]>([]);
   const [totalPrice, settotalPrice] = useState(0);
 
   useEffect(() => {
-    const storedCart = localStorage.getItem('cart');
-    const cart = storedCart ? JSON.parse(storedCart) : []; 
-    setCartItems(cart);
-    settotalPrice(getTotalCartPrice());
+    const updateCartItems = () => {
+      const storedCart = localStorage.getItem('cart');
+      const cart = storedCart ? JSON.parse(storedCart) : [];
+      setCartItems(cart);
+      settotalPrice(getTotalCartPrice());
+  };
+
+    window.addEventListener('cartUpdated', updateCartItems);
+
+    updateCartItems();
+
+    return () => {
+        window.removeEventListener('cartUpdated', updateCartItems);
+    };
+
   }, []);
+
+  const modalPosition = !isModalCartOpen ? 'translate-x-0' : 'translate-x-full';
 
   return (
     <div>
       <div className="relative z-50 overflow-hidden">
         <div className="fixed inset-0 bg-black/30 opacity-100 backdrop-blur-[.5px]"></div>
-        <div className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-1 border-neutral-200 bg-white/80 p-6 text-black backdrop-blur-xl md:w-[390px] translate-x-0">
+        <div className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-1 border-neutral-200 bg-white/80 p-6 text-black backdrop-blur-xl md:w-[390px] transition-transform duration-500 ease-in-out ${modalPosition}">
           <div className="flex items-center justify-between">
             <p className="text-lg font-semibold">My Cart</p>
             <button onClick={closeModal}>
@@ -74,20 +89,13 @@ const Cart = ({ closeModal }) => {
                         <span className="ml-1 inline font-medium">RON</span>
                       </p>
                       <div className="ml-auto flex h-9 flex-row items-center rounded-full border border-neutral-200">
-                        <button
-                          type="submit"
-                          className="ease flex h-full min-w-[36px] max-w-[36px] flex-none items-center justify-center rounded-full px-2 transition-all duration-200 hover:border-neutral-800 hover:opacity-80 ml-auto"
-                        >
-                          <LuMinus className="h-4 w-4" />
-                        </button>
+                        <MinusCartButton product={item} />
                         <p className="w-6 text-center">
                           <span className="w-full text-sm">
                             {item.quantity}
                           </span>
                         </p>
-                        <button className="ease flex h-full min-w-[36px] max-w-[36px] flex-none items-center justify-center rounded-full px-2 transition-all duration-200 hover:border-neutral-800 hover:opacity-80">
-                          <LuPlus className="h-4 w-4" />
-                        </button>
+                        <PlusCartButton product={item} />
                       </div>
                     </div>
                   </div>
