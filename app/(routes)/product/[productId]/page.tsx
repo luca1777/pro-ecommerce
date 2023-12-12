@@ -5,6 +5,8 @@ import Image from "next/image";
 import OrderButton from "@/app/_components/OrderButton";
 import { IoMdArrowForward, IoMdArrowBack } from "react-icons/io";
 import Link from "next/link";
+import AddToCartButton from "@/app/_components/AddToCartButton";
+
 
 interface ProductProps {
   params: {
@@ -170,9 +172,7 @@ const Product = async ({ params, searchParams }: ProductProps) => {
               <div className="mx-auto font-medium mb-6">
                 60% combed ringspun cotton/40% polyester jersey tee.
               </div>
-              <button className="flex w-full justify-center items-center text-white p-4 rounded-full bg-blue-600 tracking-wide hover:opacity-90">
-                Add To Cart
-              </button>
+              <AddToCartButton product={dataProduct} />
             </div>
           </div>
         </div>
