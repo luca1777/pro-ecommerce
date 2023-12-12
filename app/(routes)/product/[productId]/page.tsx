@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { getSingleProduct, getProducts } from "@/app/utils";
 import Image from "next/image";
@@ -30,6 +31,15 @@ const Product = async ({ params, searchParams }: ProductProps) => {
   const productId = params.productId;
   const dataProduct: ProductData = await getSingleProduct(productId);
   const data = await getProducts();
+
+  const handleAddToCart = () => {
+  //   todo add to redux store new line for item
+  //   items : [{ prodId; 1, prodName: ",,", price:23 }]
+
+  //   todo show cart modal
+
+
+  }
 
   return (
     <div>
