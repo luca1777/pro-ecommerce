@@ -6,7 +6,8 @@ import Image from "next/image";
 import { getTotalCartPrice } from "../utils/cartUtils";
 import PlusCartButton from "./PlusCartButton";
 import MinusCartButton from "./MinusCartButton";
-import CartImage from "@/app/assets/shopping-cart-20392.png"
+import CartImage from "@/app/assets/shopping-cart-20392.png";
+import DemoNotification from "./DemoNotification";
 
 interface Product {
   id: number;
@@ -18,9 +19,17 @@ interface Product {
   quantity: number;
 }
 
-const Cart = ({ isModalCartOpen, closeModal }) => {
+const Cart = ({ closeModal }) => {
   const [cartItems, setCartItems] = useState<Product[]>([]);
   const [totalPrice, settotalPrice] = useState(0);
+  const [showNotification, setShowNotification] = useState(false);
+
+  const handleCheckout = () => {
+    setShowNotification(true);
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 3000); // Hide notification after 3 seconds
+  };
 
   useEffect(() => {
     const updateCartItems = () => {
@@ -29,23 +38,23 @@ const Cart = ({ isModalCartOpen, closeModal }) => {
       setCartItems(cart);
       settotalPrice(getTotalCartPrice());
     };
-
+    
     window.addEventListener("cartUpdated", updateCartItems);
-
+    
     updateCartItems();
-
+    
     return () => {
       window.removeEventListener("cartUpdated", updateCartItems);
     };
   }, []);
-
-  const modalPosition = !isModalCartOpen ? "translate-x-0" : "translate-x-full";
-
+  
+  
   return (
     <div>
-      <div className="relative z-50 overflow-hidden">
+      {showNotification && <DemoNotification />}
+      <div className="relative z-40 overflow-hidden">
         <div className="fixed inset-0 bg-black/30 opacity-100 backdrop-blur-[.5px]"></div>
-        <div className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-1 border-neutral-200 bg-white/80 p-6 text-black backdrop-blur-xl md:w-[390px] transition-transform duration-500 ease-in-out ${modalPosition}">
+        <div className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-1 border-neutral-200 bg-white/80 p-6 text-black backdrop-blur-xl md:w-[390px] transition-transform duration-500 ease-in-out">
           <div className="flex items-center justify-between">
             <p className="text-lg font-semibold">My Cart</p>
             <button onClick={closeModal}>
@@ -119,7 +128,10 @@ const Cart = ({ isModalCartOpen, closeModal }) => {
                   </p>
                 </div>
               </div>
-              <button className="block w-full rounded-full bg-blue-600 p-3 text-center text-sm font-medium text-white opacity-90 hover:opacity-100">
+              <button
+                onClick={handleCheckout}
+                className="block w-full rounded-full bg-blue-600 p-3 text-center text-sm font-medium text-white opacity-90 hover:opacity-100"
+              >
                 Proceed to Checkout
               </button>
             </div>
