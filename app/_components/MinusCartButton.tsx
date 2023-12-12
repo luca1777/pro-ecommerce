@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import { removeFromCart } from '../utils/cartUtils';
+import { removeQuantity } from '../utils/cartUtils';
 import { useCartQuantity } from '../utils/useCartQuantity';
 import { LuMinus } from 'react-icons/lu';
 
@@ -8,7 +8,7 @@ const MinusCartButton = ({ product }) => {
   const { setCartQuantity } = useCartQuantity();
 
   const handleAddToCart = () => {
-    removeFromCart(product);
+    removeQuantity(product);
     setCartQuantity(prevQuantity => prevQuantity + 1); // Update cart quantity
   };
 

@@ -8,6 +8,7 @@ import PlusCartButton from "./PlusCartButton";
 import MinusCartButton from "./MinusCartButton";
 import CartImage from "@/app/assets/shopping-cart-20392.png";
 import DemoNotification from "./DemoNotification";
+import RemoveItemBtn from "./RemoveItemBtn";
 
 interface Product {
   id: number;
@@ -38,17 +39,17 @@ const Cart = ({ closeModal }) => {
       setCartItems(cart);
       settotalPrice(getTotalCartPrice());
     };
-    
+
     window.addEventListener("cartUpdated", updateCartItems);
-    
+
     updateCartItems();
-    
+
     return () => {
       window.removeEventListener("cartUpdated", updateCartItems);
     };
   }, []);
-  
-  
+
+  console.log(cartItems);
   return (
     <div>
       {showNotification && <DemoNotification />}
@@ -78,9 +79,7 @@ const Cart = ({ closeModal }) => {
                   >
                     <div className="relative flex w-full flex-row justify-between px-1 py-4">
                       <div className="absolute z-40 -mt-2 ml-[55px]">
-                        <button className="ease flex h-[17px] w-[17px] items-center justify-center rounded-full bg-neutral-500 transition-all duration-200">
-                          <IoCloseOutline className="hover:text-accent-3 mx-[1px] h-4 w-4 text-white" />
-                        </button>
+                        <RemoveItemBtn product={item} />
                       </div>
                       <Link className="z-30 flex flex-row space-x-4" href="/">
                         <div className="relative h-16 w-16 cursor-pointer overflow-hidden rounded-md border border-neutral-300 bg-neutral-300">

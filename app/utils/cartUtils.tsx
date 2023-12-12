@@ -23,7 +23,7 @@ export const addToCart = (product: Product) => {
     window.dispatchEvent(new Event('cartUpdated'));
 };
 
-export const removeFromCart = (product: Product) => {
+export const removeQuantity = (product: Product) => {
   const storedCart = localStorage.getItem('cart');
   const cart: CartItem[] = storedCart ? JSON.parse(storedCart) : [];
 
@@ -35,6 +35,20 @@ export const removeFromCart = (product: Product) => {
     if (cart[existingProductIndex].quantity === 0) {
       cart.splice(existingProductIndex, 1);
     }
+  }
+
+  localStorage.setItem('cart', JSON.stringify(cart));
+  window.dispatchEvent(new Event('cartUpdated'));
+}
+
+export const removeItem = (product: Product) => {
+  const storedCart = localStorage.getItem('cart');
+  const cart: CartItem[] = storedCart ? JSON.parse(storedCart) : [];
+
+  const existingProductIndex = cart.findIndex((item) => item.id === product.id);
+
+  if (existingProductIndex >= 0 ) {
+    cart.splice(existingProductIndex, 1);
   }
 
   localStorage.setItem('cart', JSON.stringify(cart));
