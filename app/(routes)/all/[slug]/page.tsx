@@ -6,8 +6,8 @@ import SortByBtn from '@/app/_components/SortByBtn';
 import CategoriesBtn from '@/app/_components/CategoriesBtn';
 
 const CategoryProducts = async ({ params }) => {
-    const categoryId = params.categoryId;
-    const productsByCategory = await getProductsByCategory(categoryId);
+    const slug = params.slug;
+    const productsByCategory = await getProductsByCategory(slug);
     const categories = await getCategories();
 
 
@@ -19,7 +19,7 @@ const CategoryProducts = async ({ params }) => {
         <div className="flex flex-col">
 
           <p className='pb-2 hover:underline text-sm'><Link href="/all">All</Link></p>
-          {categories.map( categorie =>  <p className='pb-2 hover:underline text-sm'><Link href={`${categorie.slug}`}>{categorie.name}</Link></p>)}
+          {categories.map( categorie =>  <p className='pb-2 hover:underline text-sm'><Link href={`/all/${categorie.slug}`}>{categorie.name}</Link></p>)}
 
         </div>
       </div>

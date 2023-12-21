@@ -26,7 +26,14 @@ export const getProducts = async () => {
 
 } 
 
-export const getProductsByCategory = async (categoryId) => {
+export const getProductsByCategory = async (slug) => {
+
+    console.log("slug: " + slug)
+
+    const categoryId = getCategoryFromURLPath(slug)
+
+    console.log("categoryId: " + categoryId)
+
     try {
         const response = await axios.get(`${baseURL}/products`, {
             auth: {
@@ -37,6 +44,7 @@ export const getProductsByCategory = async (categoryId) => {
                 category: categoryId
             }
         });
+
         return response.data;
 
     } catch (error) {
@@ -159,3 +167,17 @@ const getData = (productId: number) => {
     ],
   };
 };
+
+
+export const getCategoryFromURLPath = (url) => {
+    switch (url) {
+        case "hoodies": return 26;
+        case "jackets": return 25;
+        case "pants": return 24;
+        case "t-shirts": return 23;
+        case "shoes": return 27;
+        case "uncategorized": return 15;
+        default:
+            return "";
+    }
+}

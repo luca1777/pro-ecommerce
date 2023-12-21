@@ -9,13 +9,14 @@ const AllProducts = async () => {
     const data = await getProducts();
     const categories = await getCategories();
 
+
   return (
     <div className="mx-auto flex flex-col gap-8 px-4 pb-4 text-black md:flex-row max-w-screen-2xl border-b border-gray-300">
       <div className='w-full md:max-w-[125px] hidden md:block'>
         <p className='font-semibold pb-2'>Categories</p>
         <div className="flex flex-col">
           <p className='pb-2 hover:underline text-sm'><Link href="/all">All</Link></p>
-          {categories.map( categorie =>  <p className='pb-2 hover:underline text-sm'><Link href={`${categorie.slug}`}>{categorie.name}</Link></p>)}
+          {categories.map( categorie =>  <p className='pb-2 hover:underline text-sm'><Link href={`/all/${categorie.slug}`}>{categorie.name}</Link></p>)}
 
         </div>
       </div>
