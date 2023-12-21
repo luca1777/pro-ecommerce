@@ -69,7 +69,7 @@ const Navbar = () => {
           <ul className="hidden md:flex gap-6 md:items-center text-sm">
             <li>
               <Link
-                href="/"
+                href="/all"
                 className="text-neutral-500 hover:text-black hover:underline"
               >
                 All

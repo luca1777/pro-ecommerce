@@ -1,12 +1,13 @@
 import React from 'react'
-import { getProducts } from '@/app/utils';
+import { getProductsByCategory } from '@/app/utils';
 import Link from 'next/link';
 import Image from 'next/image';
 import SortByBtn from '@/app/_components/SortByBtn';
 import CategoriesBtn from '@/app/_components/CategoriesBtn';
 
-const AllProducts = async () => {
-    const data = await getProducts();
+const CategoryProducts = async ({ params }) => {
+    const categoryId = params.categoryId;
+    const productsByCategory = await getProductsByCategory(categoryId);
 
   return (
     <div className="mx-auto flex flex-col gap-8 px-4 pb-4 text-black md:flex-row max-w-screen-2xl border-b border-gray-300">
@@ -28,7 +29,7 @@ const AllProducts = async () => {
         </div>
         <div className="pt-4 w-full">
           <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {data?.map((product) => (
+            {productsByCategory?.map((product) => (
               <li
                 key={product.id}
                 className="relative flex flex-col items-center justify-center pb-10"
@@ -59,4 +60,4 @@ const AllProducts = async () => {
   );
 }
 
-export default AllProducts;
+export default CategoryProducts;

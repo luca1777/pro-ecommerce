@@ -12,6 +12,7 @@ export const getProducts = async () => {
             params: {
                 consumer_key: username,
                 consumer_secret: password,
+        
             }
         })
         
@@ -25,6 +26,24 @@ export const getProducts = async () => {
 
 } 
 
+export const getProductsByCategory = async (categoryId) => {
+    try {
+        const response = await axios.get(`${baseURL}/products`, {
+            auth: {
+                username: username,
+                password: password
+            },
+            params: {
+                category: categoryId
+            }
+        });
+        return response.data;
+
+    } catch (error) {
+        console.error("Eroare la obținerea produselor: ", error);
+        return [];
+    }    
+};
 
 export const getSingleProduct = async (prodId: number) => {
     try{
