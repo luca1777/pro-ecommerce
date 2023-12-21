@@ -1,5 +1,5 @@
 import React from 'react'
-import { getProducts } from '@/app/utils';
+import {getCategories, getProducts} from '@/app/utils';
 import Link from 'next/link';
 import Image from 'next/image';
 import SortByBtn from '@/app/_components/SortByBtn';
@@ -7,6 +7,7 @@ import CategoriesBtn from '@/app/_components/CategoriesBtn';
 
 const AllProducts = async () => {
     const data = await getProducts();
+    const categories = await getCategories();
 
   return (
     <div className="mx-auto flex flex-col gap-8 px-4 pb-4 text-black md:flex-row max-w-screen-2xl border-b border-gray-300">
@@ -14,11 +15,8 @@ const AllProducts = async () => {
         <p className='font-semibold pb-2'>Categories</p>
         <div className="flex flex-col">
           <p className='pb-2 hover:underline text-sm'><Link href="/all">All</Link></p>
-          <p className='pb-2 hover:underline text-sm'><Link href="/all/24">Pants</Link></p>
-          <p className='pb-2 hover:underline text-sm'><Link href="/all/23">T-Shirts</Link></p>
-          <p className='pb-2 hover:underline text-sm'><Link href="/all/25">Jackets</Link></p>
-          <p className='pb-2 hover:underline text-sm'><Link href="/all/26">Hoodies</Link></p>
-          <p className='pb-2 hover:underline text-sm'><Link href="/all/27">Shoes</Link></p>
+          {categories.map( categorie =>  <p className='pb-2 hover:underline text-sm'><Link href={`${categorie.slug}`}>{categorie.name}</Link></p>)}
+
         </div>
       </div>
       <div>

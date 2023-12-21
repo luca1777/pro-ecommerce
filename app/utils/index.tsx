@@ -45,6 +45,23 @@ export const getProductsByCategory = async (categoryId) => {
     }    
 };
 
+
+export const getCategories = async () => {
+    try {
+        const resData = await axios.get(`${baseURL}/products/categories`,{
+            params: {
+                consumer_key: username,
+                consumer_secret: password,
+            }
+        })
+
+        return resData.data;
+    }catch (error) {
+        console.log(error);
+        return[];
+    }
+};
+
 export const getSingleProduct = async (prodId: number) => {
     try{
         const resData = await axios.get(`${baseURL}/products/${prodId}`,{
