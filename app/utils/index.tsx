@@ -26,9 +26,26 @@ export const getProducts = async () => {
 
 } 
 
-export const getProductsByCategory = async (categoryId) => {
+export const getProductsByCategorySlug = async (categorySlug) => {
     try {
-        const response = await axios.get(`${baseURL}/products`, {
+        const response = await axios.get(`${baseURL}/products/categories`, {
+            auth: {
+                username: username,
+                password: password
+            },
+            params: {
+                slug: categorySlug
+            }
+        });
+
+        if (response.data.length === 0 || !response.data[0].id) {
+            console.error("Category not found for the provided slug.");
+            return [];
+        }
+        
+        const categoryId = response.data[0].id;
+
+        const productsResponse = await axios.get(`${baseURL}/products`, {
             auth: {
                 username: username,
                 password: password
@@ -37,12 +54,30 @@ export const getProductsByCategory = async (categoryId) => {
                 category: categoryId
             }
         });
-        return response.data;
+
+
+        return productsResponse.data;
 
     } catch (error) {
         console.error("Eroare la obținerea produselor: ", error);
         return [];
     }    
+};
+
+export const getCategories = async () => {
+    try {
+        const resData = await axios.get(`${baseURL}/products/categories`,{
+            params: {
+                consumer_key: username,
+                consumer_secret: password,
+            }
+        })
+
+        return resData.data;
+    }catch (error) {
+        console.log(error);
+        return[];
+    }
 };
 
 export const getSingleProduct = async (prodId: number) => {

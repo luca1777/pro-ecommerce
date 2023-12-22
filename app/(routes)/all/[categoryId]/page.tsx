@@ -1,5 +1,5 @@
 import React from 'react'
-import { getProductsByCategory } from '@/app/utils';
+import { getCategories, getProductsByCategorySlug } from '@/app/utils';
 import Link from 'next/link';
 import Image from 'next/image';
 import SortByBtn from '@/app/_components/SortByBtn';
@@ -7,20 +7,17 @@ import CategoriesBtn from '@/app/_components/CategoriesBtn';
 
 const CategoryProducts = async ({ params }) => {
     const categoryId = params.categoryId;
-    const productsByCategory = await getProductsByCategory(categoryId);
+    const productsByCategory = await getProductsByCategorySlug(categoryId);
+    const categories = await getCategories();
 
   return (
     <div className="mx-auto flex flex-col gap-8 px-4 pb-4 text-black md:flex-row max-w-screen-2xl border-b border-gray-300">
       <div className='w-full md:max-w-[125px] hidden md:block'>
         <p className='font-semibold pb-2'>Categories</p>
-        <div className="flex flex-col">
-          <p className='pb-2 hover:underline text-sm'><Link href="/all">All</Link></p>
-          <p className='pb-2 hover:underline text-sm'><Link href="/all/24">Pants</Link></p>
-          <p className='pb-2 hover:underline text-sm'><Link href="/all/23">T-Shirts</Link></p>
-          <p className='pb-2 hover:underline text-sm'><Link href="/all/25">Jackets</Link></p>
-          <p className='pb-2 hover:underline text-sm'><Link href="/all/26">Hoodies</Link></p>
-          <p className='pb-2 hover:underline text-sm'><Link href="/all/27">Shoes</Link></p>
-        </div>
+        <ul className="flex flex-col">
+          <li  className='pb-2 hover:underline text-sm'><Link href="/all">All</Link></li>
+          {categories.map((category) => (<li key={category.id} className='pb-2 hover:underline text-sm'><Link href={`/all/${category.slug}`}>{category.name}</Link></li>))}
+        </ul>
       </div>
       <div>
         <div className='flex w-full items-center justify-between gap-4'>
