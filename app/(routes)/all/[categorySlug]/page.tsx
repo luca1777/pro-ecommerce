@@ -6,8 +6,8 @@ import SortByBtn from '@/app/_components/SortByBtn';
 import CategoriesBtn from '@/app/_components/CategoriesBtn';
 
 const CategoryProducts = async ({ params }) => {
-    const categoryId = params.categoryId;
-    const productsByCategory = await getProductsByCategorySlug(categoryId);
+    const categorySlug = params.categorySlug;
+    const productsByCategory = await getProductsByCategorySlug(categorySlug);
     const categories = await getCategories();
 
   return (

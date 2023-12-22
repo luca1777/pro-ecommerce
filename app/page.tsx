@@ -3,6 +3,8 @@ import TShirt from "./assets/tricou-tommy.webp"
 import Link from 'next/link'
 import Image from 'next/image'
 import {getProducts} from "@/app/utils";
+
+
 const Home = async () => {
 
   const data = await getProducts();
