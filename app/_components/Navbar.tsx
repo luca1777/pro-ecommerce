@@ -151,7 +151,8 @@ const Navbar = () => {
         <ul className="flex w-full flex-col">
           <li className="py-2">
             <Link
-              href="/"
+              href="/all"
+              onClick={handleNav}
               className="text-xl text-black hover:text-neutral-500 hover:underline"
             >
               All

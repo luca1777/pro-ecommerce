@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import React, { useEffect, useRef, useState } from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
+import CategoriesData from './CategoriesData'
 
 const CategoriesBtn = () => {
     const [showCategories, setShowCategories] = useState(false);
@@ -34,13 +35,7 @@ const CategoriesBtn = () => {
                 <IoIosArrowDown />
             </div>
         </button>
-      {showCategories && <div className="absolute z-40 w-full rounded-b-md bg-white p-4 shadow-md">
-      <Link className='mt-2 flex text-sm text-black hover:underline' href="/">Pants</Link>
-      <Link className='mt-2 flex text-sm text-black hover:underline' href="/">T-Shirts</Link>
-      <Link className='mt-2 flex text-sm text-black hover:underline' href="/">Jackets</Link>
-      <Link className='mt-2 flex text-sm text-black hover:underline' href="/">Hoodies</Link>
-      <Link className='mt-2 flex text-sm text-black hover:underline' href="/">Shoes</Link>
-    </div>}
+      {showCategories && <CategoriesData />}
   </div>
   )
 }
