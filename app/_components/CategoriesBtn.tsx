@@ -1,5 +1,4 @@
 "use client"
-import Link from 'next/link'
 import React, { useEffect, useRef, useState } from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
 import CategoriesData from './CategoriesData'
