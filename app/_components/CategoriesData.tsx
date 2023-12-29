@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from 'react'
 import { getCategories } from '../utils';
 import Link from 'next/link';
