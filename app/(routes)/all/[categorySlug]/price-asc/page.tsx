@@ -1,13 +1,13 @@
 import React from 'react'
-import { getCategories, getProductsByCategorySlug } from '@/app/utils';
+import { getCategories, getProductsByPriceAsc } from '@/app/utils';
 import Link from 'next/link';
 import Image from 'next/image';
 import SortByBtn from '@/app/_components/SortByBtn';
 import CategoriesBtn from '@/app/_components/CategoriesBtn';
 
-const CategoryProducts = async ({ params }) => {
-    const categorySlug = params.categorySlug;
-    const productsByCategory = await getProductsByCategorySlug(categorySlug);
+const ProductPriceAsc = async ({ params }) => {
+    const categorySlug = params?.categorySlug;
+    const data = await getProductsByPriceAsc(categorySlug);
     const categories = await getCategories();
 
   return (
@@ -21,11 +21,11 @@ const CategoryProducts = async ({ params }) => {
       <div>
         <div className='flex w-full items-center justify-between gap-4'>
         <CategoriesBtn />
-        <SortByBtn categorySlug={categorySlug} />
+        <SortByBtn  categorySlug={categorySlug}/>
         </div>
         <div className="pt-4 w-full">
           <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {productsByCategory?.map((product) => (
+            {data?.map((product) => (
               <li
                 key={product.id}
                 className="relative flex flex-col items-center justify-center pb-10"
@@ -56,4 +56,4 @@ const CategoryProducts = async ({ params }) => {
   );
 }
 
-export default CategoryProducts;
+export default ProductPriceAsc;

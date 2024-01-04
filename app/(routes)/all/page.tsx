@@ -8,20 +8,21 @@ import CategoriesBtn from '@/app/_components/CategoriesBtn';
 const AllProducts = async () => {
     const data = await getProducts();
     const categories = await getCategories();
+    const categorySlug = '';
+    
 
   return (
     <div className="mx-auto flex flex-col gap-8 px-4 pb-4 text-black md:flex-row max-w-screen-2xl border-b border-gray-300">
       <div className='w-full md:max-w-[125px] hidden md:block'>
         <p className='font-semibold pb-2'>Categories</p>
         <ul className="flex flex-col">
-          <li className='pb-2 hover:underline text-sm'><Link href="/all">All</Link></li>
           {categories.map((category) => (<li key={category.id} className='pb-2 hover:underline text-sm'><Link href={`/all/${category.slug}`}>{category.name}</Link></li>))}
         </ul>
       </div>
       <div>
         <div className='flex w-full items-center justify-between gap-4'>
         <CategoriesBtn />
-        <SortByBtn />
+        <SortByBtn categorySlug={categorySlug}/>
         </div>
         <div className="pt-4 w-full">
           <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
