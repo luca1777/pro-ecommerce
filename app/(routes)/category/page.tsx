@@ -8,7 +8,7 @@ import CategoriesBtn from '@/app/_components/CategoriesBtn';
 const AllProducts = async () => {
     const data = await getProducts();
     const categories = await getCategories();
-    const categorySlug = '';
+    const categorySlug = 'all';
     
 
   return (
@@ -16,7 +16,7 @@ const AllProducts = async () => {
       <div className='w-full md:max-w-[125px] hidden md:block'>
         <p className='font-semibold pb-2'>Categories</p>
         <ul className="flex flex-col">
-          {categories.map((category) => (<li key={category.id} className='pb-2 hover:underline text-sm'><Link href={`/all/${category.slug}`}>{category.name}</Link></li>))}
+          {categories.map((category) => (<li key={category.id} className='pb-2 hover:underline text-sm'><Link href={`/category/${category.slug}`}>{category.name}</Link></li>))}
         </ul>
       </div>
       <div>

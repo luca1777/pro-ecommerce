@@ -69,7 +69,7 @@ const Navbar = () => {
           <ul className="hidden md:flex gap-6 md:items-center text-sm">
             <li>
               <Link
-                href="/all"
+                href="/category"
                 className="text-neutral-500 hover:text-black hover:underline"
               >
                 All
@@ -151,7 +151,7 @@ const Navbar = () => {
         <ul className="flex w-full flex-col">
           <li className="py-2">
             <Link
-              href="/all"
+              href="/category"
               onClick={handleNav}
               className="text-xl text-black hover:text-neutral-500 hover:underline"
             >

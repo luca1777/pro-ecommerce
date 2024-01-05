@@ -1,13 +1,13 @@
 import React from 'react'
-import { getCategories, getProductsByPriceAsc, getProductsByPriceDesc } from '@/app/utils';
+import { getCategories, getProductsByPriceAsc } from '@/app/utils';
 import Link from 'next/link';
 import Image from 'next/image';
 import SortByBtn from '@/app/_components/SortByBtn';
 import CategoriesBtn from '@/app/_components/CategoriesBtn';
 
-const ProductPriceDesc = async ({ params }) => {
+const ProductPriceAsc = async ({ params }) => {
     const categorySlug = params?.categorySlug;
-    const data = await getProductsByPriceDesc(categorySlug);
+    const data = await getProductsByPriceAsc(categorySlug);
     const categories = await getCategories();
 
   return (
@@ -15,7 +15,7 @@ const ProductPriceDesc = async ({ params }) => {
       <div className='w-full md:max-w-[125px] hidden md:block'>
         <p className='font-semibold pb-2'>Categories</p>
         <ul className="flex flex-col">
-          {categories.map((category) => (<li key={category.id} className='pb-2 hover:underline text-sm'><Link href={`/all/${category.slug}`}>{category.name}</Link></li>))}
+          {categories.map((category) => (<li key={category.id} className='pb-2 hover:underline text-sm'><Link href={`/category/${category.slug}`}>{category.name}</Link></li>))}
         </ul>
       </div>
       <div>
@@ -56,4 +56,4 @@ const ProductPriceDesc = async ({ params }) => {
   );
 }
 
-export default ProductPriceDesc;
+export default ProductPriceAsc;
