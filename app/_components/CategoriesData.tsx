@@ -1,25 +1,8 @@
-"use client";
-import React, { useEffect, useState } from 'react'
-import { getCategories } from '../utils';
+import React from 'react'
 import Link from 'next/link';
 
-interface Category {
-    id: number;
-    name: string;
-    slug: string;
-}
 
-const CategoriesData = () => {
-        const [categoriesData, setCategoriesData] = useState<Category[]>([]);
-
-        useEffect(() => {
-                const loadCategories = async () => {
-                        const data = await getCategories();
-                        setCategoriesData(data);
-                };
-
-                loadCategories();
-        }, []);
+const CategoriesData = ({ categoriesData }) => {
 
     return (
         <ul className="absolute z-40 w-full rounded-b-md bg-white p-4 shadow-md">
