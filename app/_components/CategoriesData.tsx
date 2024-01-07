@@ -19,7 +19,7 @@ const CategoriesData = () => {
                 };
 
                 loadCategories();
-        }, [categoriesData]);
+        }, []);
 
     return (
         <ul className="absolute z-40 w-full rounded-b-md bg-white p-4 shadow-md">
