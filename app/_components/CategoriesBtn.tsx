@@ -2,10 +2,18 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
 import CategoriesData from './CategoriesData'
+import { getCategories } from '../utils';
+
+interface Category {
+    id: number;
+    name: string;
+    slug: string;
+}
 
 const CategoriesBtn = () => {
     const [showCategories, setShowCategories] = useState(false);
     const catRef = useRef<HTMLDivElement>(null);
+    const [categoriesData, setCategoriesData] = useState<Category[]>([]);
 
 
     const toggleShowCategories = () => {
@@ -26,6 +34,16 @@ const CategoriesBtn = () => {
 
     }, []);
 
+
+    useEffect(() => {
+            const loadCategories = async () => {
+                    const data = await getCategories();
+                    setCategoriesData(data);
+            };
+
+            loadCategories();
+    }, []);
+
   return (
     <div ref={catRef} className='relative md:hidden w-full'>
         <button onClick={toggleShowCategories} className='w-full'>
@@ -34,7 +52,7 @@ const CategoriesBtn = () => {
                 <IoIosArrowDown />
             </div>
         </button>
-      {showCategories && <CategoriesData />}
+      {showCategories && <CategoriesData categoriesData={categoriesData} />}
   </div>
   )
 }
