@@ -22,7 +22,7 @@ interface ProductData {
     src: string;
   }[];
   attributes: {
-    options: string;
+    options: string[];
   }[];
 }
 
@@ -30,6 +30,7 @@ const Product = async ({ params, searchParams }: ProductProps) => {
   const productId = params.productId;
   const dataProduct: ProductData = await getSingleProduct(productId);
   const data = await getProducts();
+  const dataSizes = dataProduct.attributes[0]?.options;
 
   return (
     <div>
@@ -117,47 +118,19 @@ const Product = async ({ params, searchParams }: ProductProps) => {
               </div>
             </div>
             <div>
-              <div className="mb-4 text-sm uppercase tracking-wide font-semibold">
-                Color
-              </div>
-              <div className="flex flex-wrap gap-3">
-                <button className="flex justify-center items-center min-w-[48px] rounded-full border px-4 py-1 text-sm bg-neutral-100 transition duration-300 ease-in-out hover:scale-110 ring-2 ring-transparent hover:ring-blue-600 font-semibold">
-                  Black
-                </button>
-                <button className="flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-4 py-1 text-sm transition duration-300 ease-in-out hover:scale-110 ring-2 ring-transparent hover:ring-blue-600 font-semibold">
-                  White
-                </button>
-                <button className="flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-4 py-2 text-sm transition duration-300 ease-in-out hover:scale-110 ring-2 ring-transparent hover:ring-blue-600 font-semibold">
-                  Blue
-                </button>
-              </div>
               <div className="my-8">
                 <div className="mb-4 text-sm uppercase tracking-wide font-semibold">
-                  Color
+                  Size:
                 </div>
-                <div className="flex flex-wrap gap-3">
+                <ul className="flex flex-wrap gap-3">
+                  {dataSizes?.map((size, index) => (
+                  <li key={index}>
                   <button className="flex justify-center items-center min-w-[48px] rounded-full border px-4 py-1 text-sm bg-neutral-100 transition duration-300 ease-in-out hover:scale-110 ring-2 ring-transparent hover:ring-blue-600 font-semibold">
-                    XS
-                  </button>
-                  <button className="flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-4 py-1 text-sm transition duration-300 ease-in-out hover:scale-110 ring-2 ring-transparent hover:ring-blue-600 font-semibold">
-                    S
-                  </button>
-                  <button className="flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-4 py-2 text-sm transition duration-300 ease-in-out hover:scale-110 ring-2 ring-transparent hover:ring-blue-600 font-semibold">
-                    M
-                  </button>
-                  <button className="flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-4 py-2 text-sm transition duration-300 ease-in-out hover:scale-110 ring-2 ring-transparent hover:ring-blue-600 font-semibold">
-                    L
-                  </button>
-                  <button className="flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-4 py-2 text-sm transition duration-300 ease-in-out hover:scale-110 ring-2 ring-transparent hover:ring-blue-600 font-semibold">
-                    XL
-                  </button>
-                  <button className="flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-4 py-2 text-sm transition duration-300 ease-in-out hover:scale-110 ring-2 ring-transparent hover:ring-blue-600 font-semibold">
-                    XXL
-                  </button>
-                  <button className="flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-4 py-2 text-sm transition duration-300 ease-in-out hover:scale-110 ring-2 ring-transparent hover:ring-blue-600 font-semibold">
-                    XXXL
-                  </button>
-                </div>
+                    {size}
+                  </button>  
+                  </li>
+                  ))}
+                </ul>
               </div>
               <div className="mx-auto font-medium mb-6">
                 60% combed ringspun cotton/40% polyester jersey tee.
@@ -212,7 +185,4 @@ const Product = async ({ params, searchParams }: ProductProps) => {
 
 export default Product;
 
-// {productId}
-// {dataProduct?.attributes[0]?.options}
-// <h2>{dataProduct.description.replace(/<\/?p>/g, "")}</h2>
-// <OrderButton productId={productId} />
+
