@@ -98,6 +98,41 @@ export const getProductsByPriceAsc = async (categorySlug) => {
     } 
 }
 
+export const getProductsByDate = async (categorySlug) => {
+    try {
+        const response = await axios.get (`${baseURL}/products/categories`, {
+            params: {
+                consumer_key: username, 
+                consumer_secret: password,
+                slug: categorySlug
+            }
+        });
+
+        if (response.data.length === 0 || !response.data[0].id) {
+            console.error("Category not found for the provided slug.");
+            return[];
+        }
+
+        const categoryId = response.data[0].id;
+
+        const productsResponse = await axios.get(`${baseURL}/products`, {
+            params: {
+                consumer_key: username, 
+                consumer_secret: password, 
+                category: categoryId,
+                orderby: "date",
+                order: "desc"
+            }
+        });
+
+        return productsResponse.data;
+        
+    } catch (error) {
+        console.error("Eroare la obținerea produselor: ", error);
+        return [];
+    }
+}
+
 export const getProductsByCategorySlug = async (categorySlug) => {
     try {
         const response = await axios.get(`${baseURL}/products/categories`, {
