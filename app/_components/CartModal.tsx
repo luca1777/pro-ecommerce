@@ -14,6 +14,7 @@ interface Product {
   id: number;
   name: string;
   price: string;
+  size: string;
   images: {
     src: string;
   }[];
@@ -93,6 +94,7 @@ const Cart = ({ closeModal }) => {
                         </div>
                         <div className="flex flex-1 flex-col text-base">
                           <span className="font-medium">{item.name}</span>
+                          <span className="font-medium">{item.size}</span>
                         </div>
                       </Link>
                       <div className="flex h-16 flex-col justify-between">

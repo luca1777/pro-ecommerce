@@ -5,6 +5,7 @@ import OrderButton from "@/app/_components/OrderButton";
 import { IoMdArrowForward, IoMdArrowBack } from "react-icons/io";
 import Link from "next/link";
 import AddToCartButton from "@/app/_components/AddToCartButton";
+import SizeSelectionBtn from "@/app/_components/SizeSelectionBtn";
 
 
 interface ProductProps {
@@ -122,15 +123,7 @@ const Product = async ({ params, searchParams }: ProductProps) => {
                 <div className="mb-4 text-sm uppercase tracking-wide font-semibold">
                   Size:
                 </div>
-                <ul className="flex flex-wrap gap-3">
-                  {dataSizes?.map((size, index) => (
-                  <li key={index}>
-                  <button className="flex justify-center items-center min-w-[48px] rounded-full border px-4 py-1 text-sm bg-neutral-100 transition duration-300 ease-in-out hover:scale-110 ring-2 ring-transparent hover:ring-blue-600 font-semibold">
-                    {size}
-                  </button>  
-                  </li>
-                  ))}
-                </ul>
+                <SizeSelectionBtn dataSizes={dataSizes} productId={productId} />
               </div>
               <div className="mx-auto font-medium mb-6">
                 60% combed ringspun cotton/40% polyester jersey tee.
