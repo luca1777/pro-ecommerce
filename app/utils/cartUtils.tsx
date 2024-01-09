@@ -1,17 +1,18 @@
 "use client"
 interface Product {
-    id: number;
+  id: number;
+  size: string; 
 }
 
 interface CartItem extends Product {
-    quantity: number;
+  quantity: number;
 }
 
 export const addToCart = (product: Product) => {
-    const storedCart = localStorage.getItem('cart');
-    const cart: CartItem[] = storedCart ? JSON.parse(storedCart) : [];
+  const storedCart = localStorage.getItem('cart');
+  const cart: CartItem[] = storedCart ? JSON.parse(storedCart) : [];
   
-    const existingProduct = cart.find((item) => item.id === product.id);
+    const existingProduct = cart.find((item) => item.id === product.id && item.size === product.size);
   
     if (existingProduct) {
       existingProduct.quantity += 1;
@@ -27,13 +28,14 @@ export const removeQuantity = (product: Product) => {
   const storedCart = localStorage.getItem('cart');
   const cart: CartItem[] = storedCart ? JSON.parse(storedCart) : [];
 
-  const existingProductIndex = cart.findIndex((item) => item.id === product.id);
+  const existingProductIndex = cart.findIndex((item) => item.id === product.id  && item.size === product.size);
   
   if (existingProductIndex >= 0) {
     cart[existingProductIndex].quantity -= 1;
   
     if (cart[existingProductIndex].quantity === 0) {
       cart.splice(existingProductIndex, 1);
+      localStorage.removeItem(`selectedSize-${product.id}`);
     }
   }
 
@@ -45,10 +47,11 @@ export const removeItem = (product: Product) => {
   const storedCart = localStorage.getItem('cart');
   const cart: CartItem[] = storedCart ? JSON.parse(storedCart) : [];
 
-  const existingProductIndex = cart.findIndex((item) => item.id === product.id);
+  const existingProductIndex = cart.findIndex((item) => item.id === product.id && item.size === product.size);
 
   if (existingProductIndex >= 0 ) {
     cart.splice(existingProductIndex, 1);
+    localStorage.removeItem(`selectedSize-${product.id}`);
   }
 
   localStorage.setItem('cart', JSON.stringify(cart));

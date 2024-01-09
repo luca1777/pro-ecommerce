@@ -7,7 +7,15 @@ const AddToCartButton = ({ product }) => {
   const { setCartQuantity } = useCartQuantity();
 
   const handleAddToCart = () => {
-    addToCart(product);
+    const selectedSize = localStorage.getItem(`selectedSize-${product.id}`);
+    if (selectedSize) {
+      const productWithSize = { ...product, size: selectedSize };
+      addToCart(productWithSize);
+    } else {
+      alert('Please select a size');
+      return
+    } 
+
     setCartQuantity(prevQuantity => prevQuantity + 1); // Update cart quantity
   };
 
