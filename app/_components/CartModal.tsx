@@ -122,19 +122,19 @@ const Cart = ({ closeModal }) => {
                   <p className="text-right">Calculated at checkout</p>
                 </div>
                 <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1">
-                  <p>Total</p>
+                  <p>Subtotal</p>
                   <p className="text-right text-base text-black">
                     {totalPrice.toFixed(2)}
                     <span className="ml-1 inline">RON</span>
                   </p>
                 </div>
               </div>
-              <button
-                onClick={handleCheckout}
+              <Link
+                href="/checkout"
                 className="block w-full rounded-full bg-blue-600 p-3 text-center text-sm font-medium text-white opacity-90 hover:opacity-100"
               >
                 Proceed to Checkout
-              </button>
+              </Link>
             </div>
           )}
         </div>
