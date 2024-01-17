@@ -6,8 +6,8 @@ const PaymentMessage = () => {
   
     if ((values as { paymentMethod: string }).paymentMethod === 'cash') {
       return (
-        <div className="text-sm p-3">
-          Plata se va face cash la curier.
+        <div className="p-3">
+          Payment will be made in cash to the courier.
         </div>
       );
     }

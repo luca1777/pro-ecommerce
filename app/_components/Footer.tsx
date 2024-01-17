@@ -41,7 +41,7 @@ const Footer = () => {
       </div>
       <div className='border-t border-gray-300 w-full text-gray-400 py-6 text-sm'>
         <div className='flex flex-col md:flex-row w-full max-w-7xl mx-auto items-center justify-center gap-1'>
-            <p>© 2023 CODE VILLAGE, All right reserved.</p>
+            <p>© 2023 Luca Alexandru, All right reserved.</p>
             <hr className='h-4 w-[1px] bg-gray-300 mx-2 hidden md:inline-block'></hr>
             <p>Designed in Bucharest</p>
         </div>
