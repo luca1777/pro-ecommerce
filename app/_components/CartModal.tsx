@@ -124,7 +124,7 @@ const Cart = ({ closeModal }) => {
                 <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1">
                   <p>Subtotal</p>
                   <p className="text-right text-base text-black">
-                    {totalPrice.toFixed(2)}
+                  {totalPrice.toLocaleString('ro-RO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     <span className="ml-1 inline">RON</span>
                   </p>
                 </div>

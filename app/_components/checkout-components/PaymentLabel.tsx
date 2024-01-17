@@ -14,7 +14,7 @@ const PaymentLabel = () => {
 
   return (
     <div className="mb-4 max-w-xl">
-    <h2 className="text-lg font-semibold mb-2">Payment</h2>
+    <h2 className="text-2xl font-semibold mb-2">Payment</h2>
     <p className="text-sm text-gray-500 mb-4">
       All transactions are secure and encrypted.
     </p>
