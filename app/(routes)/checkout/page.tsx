@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getTotalCartPrice } from "@/app/utils/cartUtils";
 import  Logo  from "@/app/assets/logo.png"
+import { createOrder } from "@/app/utils";
 
 interface CheckoutProduct {
   id: number;
@@ -27,7 +28,6 @@ const INITIAL_FORM_STATE = {
   addressLine1: "",
   addressLine2: "",
   city: "",
-  state: "",
   country: "",
   paymentMethod: "cash",
   postalCode:"",
@@ -36,29 +36,34 @@ const INITIAL_FORM_STATE = {
 };
 
 const FORM_VALIDATION = Yup.object().shape({
-  firstName: Yup.string().required("Required"),
-  lastName: Yup.string().required("Required"),
-  email: Yup.string().email("Invalid email.").required("Required"),
+  firstName: Yup.string().matches(/^[A-Za-z]+$/, "Only letters are allowed").required("Required"),
+  lastName: Yup.string().matches(/^[A-Za-z]+$/, "Only letters are allowed").required("Required"),
+  email: Yup.string().email("Invalid email.").required("Required").test(
+    'email-format', 
+    'Email must include "@" and end with ".com"', 
+    value => !!value && value.includes('@') && value.endsWith('.com')
+  ),
   phone: Yup.string()
     .matches(/^\d{10}$/, "Phone number must be exactly 10 digits")
     .required("Required"),
   addressLine1: Yup.string().required("Required"),
   addressLine2: Yup.string(),
-  city: Yup.string().required("Required"),
-  county: Yup.string().required("Required"),
+  city: Yup.string().matches(/^[A-Za-z]+$/, "Only letters are allowed").required("Required"),
+  county: Yup.string().matches(/^[A-Za-z]+$/, "Only letters are allowed").required("Required"),
   country: Yup.string().required("Required"),
   postalCode: Yup.string()
     .matches(/^\d{6}$/, "Postal code must be exactly 6 numbers.")
     .required("Postal code is required"),
-  message: Yup.string(),
   termsOfService: Yup.boolean()
     .oneOf([true], "The terms and conditions must be accepted.")
     .required("Required"),
 });
 
-const App = () => {
+const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState<CheckoutProduct[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [formData, setFormData] = useState(null);
 
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
@@ -67,6 +72,24 @@ const App = () => {
     setTotalPrice(getTotalCartPrice());
   }, []);
 
+  useEffect(() => {
+    if (formSubmitted && formData) {
+      const submitOrder = async () => {
+        const response = await createOrder(formData, cartItems, totalPrice);
+        if (response) {
+          // redirectioneaza catre pagina de succes
+          // goleste cosul
+          console.log("Order created successfully:", response)
+        } else {
+          console.log("Error creating order");
+        }
+      };
+
+      submitOrder();
+      setFormSubmitted(false); 
+    }
+  }, [formSubmitted, formData, cartItems, totalPrice]);
+
   const totalWithShipping = (totalPrice) => {
     const shippingFee = 19.99;
     if (totalPrice >= 300) {
@@ -74,6 +97,14 @@ const App = () => {
     } else {
       return totalPrice + shippingFee;
     }
+  };
+
+  const onFormSubmit = (values, actions) => {
+    setFormData(values);
+    setFormSubmitted(true);
+    actions.resetForm();
+    setCartItems([]);
+    localStorage.setItem("cart", JSON.stringify([]));
   };
 
   return (
@@ -89,9 +120,7 @@ const App = () => {
             <Formik
               initialValues={INITIAL_FORM_STATE}
               validationSchema={FORM_VALIDATION}
-              onSubmit={(values) => {
-                console.log(values);
-              }}
+              onSubmit={(values, actions) => onFormSubmit(values, actions)}
             >
               <Form>
                 <div className="mx-auto max-w-xl">
@@ -298,8 +327,8 @@ const App = () => {
                       </div>
                       <div className="mx-auto max-w-xl">
                         <ul>
-                          {cartItems.map((item) => (
-                            <li key={item.id} className="">
+                          {cartItems.map((item, index) => (
+                            <li key={item.id + "-" + index} className="">
                               <div className="flex w-full flex-row justify-between py-2">
                                 <div className="absolute z-40 -mt-2 ml-[53px]">
                                   <div className="flex items-center justify-center h-[22px] w-[22px] rounded-full bg-neutral-500">
@@ -417,8 +446,8 @@ const App = () => {
               </div>
               <div className="mx-auto max-w-xl">
                 <ul>
-                  {cartItems.map((item) => (
-                    <li key={item.id} className="">
+                  {cartItems.map((item, index) => (
+                    <li key={item.id + "-" + index} className="">
                       <div className="flex w-full flex-row justify-between py-2">
                         <div className="absolute z-40 -mt-2 ml-[53px]">
                           <div className="flex items-center justify-center h-[22px] w-[22px] rounded-full bg-neutral-500">
@@ -499,4 +528,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default CheckoutPage;
