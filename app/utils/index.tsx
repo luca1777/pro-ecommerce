@@ -203,33 +203,19 @@ export const getSingleProduct = async (prodId: number) => {
 
 }
 
-const config = {
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Basic ${btoa(username + ":" + password)}`
-    }
-};
-
-export const createOrder = async (prodId: number) => {
-
-    console.log("action -> create order")
-
-    const baseURL = "https://apollo.code-village.ro/wp-json/wc/v3";
-    const username = "ck_3d06586e1a83d260041f72db0404f0ca5102f1f7";
-    const password = "cs_3e7b2d095ecf51ec04a162882e3dd595eaab9cbd";
-
-    const config = {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Basic ${btoa(username + ":" + password)}`
-        }
-    };
-
+export const createOrder = async (formData, cartItems, totalPrice) => {
 
     try {
-        const resData = await axios.post(`${baseURL}/orders`, getData(prodId), config);
-        console.log("Order created", resData.data)
+        const resData = await axios.post(`${baseURL}/orders`, dataOrder(formData, cartItems, totalPrice), {
+            params: {
+                consumer_key: username,
+                consumer_secret: password,
+            }
+
+        });
+
         return resData;
+
     } catch (error) {
         console.log('There was an error creating the order:', error);
         return [];
@@ -237,45 +223,45 @@ export const createOrder = async (prodId: number) => {
 }
 
 
-const getData = (productId: number) => {
+const dataOrder = (formData, cartItems, totalPrice) => {
+    const lineItems = cartItems.map(item => ({
+        product_id: item.id,
+        quantity: item.quantity
+    }));
+
   return {
-    payment_method: "bacs",
-    payment_method_title: "Direct Bank Transfer",
-    set_paid: true,
-    status: "completed",
+    payment_method: formData.paymentMethod === "cash" ? "cod" : "bacs",
+    payment_method_title: formData.paymentMethod === "cash" ? "Cash on Delivery" : "Direct Bank Transfer",
+    set_paid: formData.paymentMethod === "cash" ? false : true,
+    status: formData.paymentMethod === "cash" ? "processing" : "completed",
     billing: {
-      first_name: "John",
-      last_name: "Doe",
-      address_1: "969 Market",
-      address_2: "",
-      city: "San Francisco",
-      state: "CA",
-      postcode: "94103",
-      country: "US",
-      email: "john.doe@example.com",
-      phone: "(555) 555-5555",
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        address_1: formData.addressLine1,
+        address_2: formData.addressLine2,
+        city: formData.city,
+        state: formData.county, 
+        postcode: formData.postalCode,
+        country: formData.country,
+        email: formData.email,
+        phone: formData.phone
     },
     shipping: {
-      first_name: "John",
-      last_name: "Doe",
-      address_1: "969 Market",
-      address_2: "",
-      city: "San Francisco",
-      state: "CA",
-      postcode: "94103",
-      country: "US",
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        address_1: formData.addressLine1,
+        address_2: formData.addressLine2,
+        city: formData.city,
+        state: formData.county,
+        postcode: formData.postalCode,
+        country: formData.country
     },
-    line_items: [
-      {
-        product_id: productId,
-        quantity: 1,
-      },
-    ],
+    line_items: lineItems,
     shipping_lines: [
       {
         method_id: "flat_rate",
         method_title: "Flat Rate",
-        total: "10.00",
+        total: totalPrice >= 300 ? "" : "19.99",
       },
     ],
   };
