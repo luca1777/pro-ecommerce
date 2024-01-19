@@ -8,6 +8,7 @@ import Link from "next/link";
 import { getTotalCartPrice } from "@/app/utils/cartUtils";
 import  Logo  from "@/app/assets/logo.png"
 import { createOrder } from "@/app/utils";
+import loadStripe from "@/app/utils/loadStripe";
 
 interface CheckoutProduct {
   id: number;
@@ -18,6 +19,21 @@ interface CheckoutProduct {
     src: string;
   }[];
   quantity: number;
+}
+
+interface FormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  country: string;
+  paymentMethod: string;
+  postalCode: string;
+  county: string;
+  termsOfService: boolean;
 }
 
 const INITIAL_FORM_STATE = {
@@ -63,7 +79,8 @@ const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState<CheckoutProduct[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [formData, setFormData] = useState(null);
+  const [formData, setFormData] = useState<FormData | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
@@ -101,11 +118,40 @@ const CheckoutPage = () => {
 
   const onFormSubmit = (values, actions) => {
     setFormData(values);
-    setFormSubmitted(true);
+    setIsSubmitting(true); // Set the flag to true to indicate submission
     actions.resetForm();
-    setCartItems([]);
-    localStorage.setItem("cart", JSON.stringify([]));
   };
+
+  useEffect(() => {
+    const processFormSubmission = async () => {
+      if (formData && isSubmitting) {
+        if (formData.paymentMethod === 'creditCard') {
+          const stripe = await loadStripe(); // Load Stripe dynamically
+          try {
+            const response = await fetch('/api/create-checkout-session', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ items: cartItems, customerDetails: formData }),
+            });
+            const { sessionId } = await response.json();
+            await stripe.redirectToCheckout({ sessionId });
+          } catch (error) {
+            console.error('Error creating Stripe session:', error);
+          }
+        } else {
+          // Handle other payment methods
+          setFormSubmitted(true);
+          setCartItems([]);
+          localStorage.setItem("cart", JSON.stringify([]));
+        }
+        setIsSubmitting(false); // Reset the submission flag
+      }
+    };
+  
+    processFormSubmission();
+  }, [formData, isSubmitting, cartItems]);
 
   return (
     <div className="border-b border-gray-300">
