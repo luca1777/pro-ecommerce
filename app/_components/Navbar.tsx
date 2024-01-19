@@ -38,12 +38,10 @@ const Navbar = () => {
     }, []);
     const openModal = () => {
       setModalCartOpen(true);
-      document.body.classList.add('overflow-hidden');
   };
   
   const closeModal = () => {
       setModalCartOpen(false);
-      document.body.classList.remove('overflow-hidden');
   };
     
     const handleNav = ():void => {

@@ -1,7 +1,6 @@
 import React from "react";
 import { getSingleProduct, getProducts } from "@/app/utils";
 import Image from "next/image";
-import OrderButton from "@/app/_components/OrderButton";
 import { IoMdArrowForward, IoMdArrowBack } from "react-icons/io";
 import Link from "next/link";
 import AddToCartButton from "@/app/_components/AddToCartButton";
