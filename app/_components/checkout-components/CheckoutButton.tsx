@@ -1,7 +1,8 @@
 import { loadStripe, Stripe } from '@stripe/stripe-js';
 import axios from 'axios';
 
-const asyncStripe = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+const stripePublicKey = `${process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!}`
+const asyncStripe = loadStripe(stripePublicKey);
 
 const CheckoutButton = ({ totalPrice, cartItems }) => {
 

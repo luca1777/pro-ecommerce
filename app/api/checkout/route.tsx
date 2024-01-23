@@ -1,7 +1,8 @@
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
 
-const stripe = new Stripe(`${process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!}`);
+const stripeKey = `${process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!}`;
+const stripe = new Stripe(stripeKey);
 const host = process.env.NEXT_PUBLIC_HOST || 'http://localhost:3000';
 
 export async function POST(request: NextRequest) {
