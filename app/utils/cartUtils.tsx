@@ -65,8 +65,19 @@ export const getTotalCartQuantity = () => {
     return cartItems.reduce((total, item) => total + item.quantity, 0);
 };
 
-export const getTotalCartPrice = () => {
+export const getSubtotalCartPrice = () => {
   const storedCart = localStorage.getItem("cart");
   const cartItems = storedCart ? JSON.parse(storedCart) : [];
   return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+};
+
+export const getTotalCartPrice = () => {
+  const storedCart = localStorage.getItem("cart");
+  const cartItems = storedCart ? JSON.parse(storedCart) : [];
+  const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+
+  const shippingCost = 19.99;
+  const totalWithShipping = subtotal >= 300 ? subtotal : subtotal + shippingCost;
+
+  return totalWithShipping;
 };

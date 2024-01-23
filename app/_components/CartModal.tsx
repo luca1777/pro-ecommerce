@@ -3,7 +3,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import Image from "next/image";
-import { getTotalCartPrice } from "../utils/cartUtils";
+import { getSubtotalCartPrice, getTotalCartPrice } from "../utils/cartUtils";
 import PlusCartButton from "./PlusCartButton";
 import MinusCartButton from "./MinusCartButton";
 import CartImage from "@/app/assets/shopping-cart-20392.png";
@@ -23,7 +23,7 @@ interface Product {
 
 const Cart = ({ closeModal }) => {
   const [cartItems, setCartItems] = useState<Product[]>([]);
-  const [totalPrice, settotalPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
   const [showNotification, setShowNotification] = useState(false);
 
   const handleCheckout = () => {
@@ -38,7 +38,7 @@ const Cart = ({ closeModal }) => {
       const storedCart = localStorage.getItem("cart");
       const cart = storedCart ? JSON.parse(storedCart) : [];
       setCartItems(cart);
-      settotalPrice(getTotalCartPrice());
+      setTotalPrice(getSubtotalCartPrice());
     };
 
     window.addEventListener("cartUpdated", updateCartItems);
