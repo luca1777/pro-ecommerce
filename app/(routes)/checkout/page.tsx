@@ -81,8 +81,6 @@ const CheckoutPage = () => {
       const submitOrder = async () => {
         const response = await createOrder(formData, cartItems, totalPrice);
         if (response) {
-          // redirectioneaza catre pagina de succes
-          // goleste cosul
           console.log("Order created successfully:", response)
         } else {
           console.log("Error creating order");
@@ -94,10 +92,9 @@ const CheckoutPage = () => {
     }
   }, [formSubmitted, formData, cartItems, totalPrice]);
 
-  const onFormSubmit = (values, actions) => {
+  const onFormSubmit = (values) => {
     setFormData(values);
     setFormSubmitted(true);
-    actions.resetForm();
     setCartItems([]);
     localStorage.setItem("cart", JSON.stringify([]));
   };
@@ -115,7 +112,7 @@ const CheckoutPage = () => {
             <Formik
               initialValues={INITIAL_FORM_STATE}
               validationSchema={FORM_VALIDATION}
-              onSubmit={(values, actions) => onFormSubmit(values, actions)}
+              onSubmit={(values) => onFormSubmit(values)}
             >
               <Form>
                 <div className="mx-auto max-w-xl">
