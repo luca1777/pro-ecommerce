@@ -3,7 +3,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import Image from "next/image";
-import { getSubtotalCartPrice, getTotalCartPrice } from "../utils/cartUtils";
+import { getSubtotalCartPrice } from "../utils/cartUtils";
 import PlusCartButton from "./PlusCartButton";
 import MinusCartButton from "./MinusCartButton";
 import CartImage from "@/app/assets/shopping-cart-20392.png";
