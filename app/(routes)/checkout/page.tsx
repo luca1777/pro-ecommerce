@@ -5,9 +5,10 @@ import * as Yup from "yup";
 import PaymentLabel from "@/app/_components/checkout-components/PaymentLabel";
 import Image from "next/image";
 import Link from "next/link";
-import { getTotalCartPrice } from "@/app/utils/cartUtils";
+import { getSubtotalCartPrice, getTotalCartPrice } from "@/app/utils/cartUtils";
 import  Logo  from "@/app/assets/logo.png"
 import { createOrder } from "@/app/utils";
+import CheckoutButton from "@/app/_components/checkout-components/CheckoutButton";
 
 interface CheckoutProduct {
   id: number;
@@ -61,6 +62,7 @@ const FORM_VALIDATION = Yup.object().shape({
 
 const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState<CheckoutProduct[]>([]);
+  const [subTotalCartPrice, setSubtotalCartPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState(null);
@@ -69,8 +71,10 @@ const CheckoutPage = () => {
     const storedCart = localStorage.getItem("cart");
     const cart = storedCart ? JSON.parse(storedCart) : [];
     setCartItems(cart);
+    setSubtotalCartPrice(getSubtotalCartPrice());
     setTotalPrice(getTotalCartPrice());
   }, []);
+
 
   useEffect(() => {
     if (formSubmitted && formData) {
@@ -89,15 +93,6 @@ const CheckoutPage = () => {
       setFormSubmitted(false); 
     }
   }, [formSubmitted, formData, cartItems, totalPrice]);
-
-  const totalWithShipping = (totalPrice) => {
-    const shippingFee = 19.99;
-    if (totalPrice >= 300) {
-      return totalPrice;
-    } else {
-      return totalPrice + shippingFee;
-    }
-  };
 
   const onFormSubmit = (values, actions) => {
     setFormData(values);
@@ -379,7 +374,7 @@ const CheckoutPage = () => {
                         <div className="flex justify-between mt-6">
                           <p>Subtotal</p>
                           <p className="font-semibold">
-                            {totalPrice.toLocaleString("ro-RO", {
+                            {subTotalCartPrice.toLocaleString("ro-RO", {
                               minimumFractionDigits: 2,
                               maximumFractionDigits: 2,
                             })}
@@ -395,7 +390,7 @@ const CheckoutPage = () => {
                         <div className="flex justify-between mt-3 text-lg font-bold">
                           <p>Total</p>
                           <p className="font-semibold">
-                            {totalWithShipping(totalPrice).toLocaleString(
+                            {totalPrice.toLocaleString(
                               "ro-RO",
                               {
                                 minimumFractionDigits: 2,
@@ -428,12 +423,7 @@ const CheckoutPage = () => {
                   </div>
 
                   <div className="max-w-xl my-6">
-                    <button
-                      type="submit"
-                      className="w-full bg-blue-500 hover:bg-blue-700 text-white text-xl font-semibold py-3.5 px-4 rounded"
-                    >
-                      Complete the order
-                    </button>
+                    <CheckoutButton totalPrice={subTotalCartPrice} cartItems={cartItems} />
                   </div>
                 </div>
               </Form>
@@ -496,7 +486,7 @@ const CheckoutPage = () => {
                 <div className="flex justify-between mt-6">
                   <p>Subtotal</p>
                   <p className="font-semibold">
-                    {totalPrice.toLocaleString("ro-RO", {
+                    {subTotalCartPrice.toLocaleString("ro-RO", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}
@@ -512,7 +502,7 @@ const CheckoutPage = () => {
                 <div className="flex justify-between mt-3 text-lg font-bold">
                   <p>Total</p>
                   <p className="font-semibold">
-                    {totalWithShipping(totalPrice).toLocaleString("ro-RO", {
+                    {totalPrice.toLocaleString("ro-RO", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}
