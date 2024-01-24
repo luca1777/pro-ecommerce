@@ -4,9 +4,14 @@ import axios from 'axios';
 const stripePublicKey = `${process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!}`
 const asyncStripe = loadStripe(stripePublicKey);
 
-const CheckoutButton = ({ totalPrice, cartItems }) => {
+const CheckoutButton = ({ totalPrice, cartItems, isFormValid }) => {
 
-  const handler = async () => {
+  const handler = async (e) => {
+    if (!isFormValid) {
+      e.preventDefault();
+      return;
+    }
+
     try {
       const stripe: Stripe | null = await asyncStripe;
       if (!stripe) {
