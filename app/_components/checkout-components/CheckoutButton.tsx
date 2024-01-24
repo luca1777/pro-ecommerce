@@ -4,9 +4,11 @@ import axios from 'axios';
 const stripePublicKey = `${process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!}`
 const asyncStripe = loadStripe(stripePublicKey);
 
-const CheckoutButton = ({ totalPrice, cartItems }) => {
+const CheckoutButton = ({ totalPrice, cartItems, isValid, dirty }) => {
 
-  const handler = async () => {
+  const handler = async (isValid, dirty) => {
+    if (!isValid || !dirty) return;
+
     try {
       const stripe: Stripe | null = await asyncStripe;
       if (!stripe) {
@@ -33,8 +35,9 @@ const CheckoutButton = ({ totalPrice, cartItems }) => {
 
   return (
     <button
-      type='submit'
-      onClick={handler}
+  
+      type="submit"
+      onClick={() => handler(isValid, dirty)}
       className='w-full bg-blue-500 hover:bg-blue-700 text-white text-xl font-semibold py-3.5 px-4 rounded'
     >
       Complete the order
