@@ -426,11 +426,11 @@ const CheckoutPage = () => {
                         className="text-red-600"
                       />
                     </div>
-
                     <div className="max-w-xl my-6">
                       <CheckoutButton
-                        isFormValid={isValid && dirty}
-                        totalPrice={subTotalCartPrice}
+                        dirty={dirty}
+                        isValid={isValid}
+                        totalPrice={totalPrice}
                         cartItems={cartItems}
                       />
                     </div>
