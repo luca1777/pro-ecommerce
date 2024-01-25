@@ -1,53 +1,52 @@
-"use client"
-import Link from 'next/link';
-import React, { useEffect, useState } from 'react'
-import { usePathname } from 'next/navigation';
-import { FaSearch } from 'react-icons/fa';
+"use client";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { FaSearch } from "react-icons/fa";
 import { BsCart2 } from "react-icons/bs";
-import { AiOutlineMenu,AiOutlineClose } from "react-icons/ai"
+import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { FaRegUser } from "react-icons/fa6";
-import  Logo  from "../assets/logo.png"
-import Image from 'next/image';
-import Login from './LoginModal';
-import { getTotalCartQuantity } from '../utils/cartUtils'; 
-import Cart from './CartModal';
-
+import Logo from "../assets/logo.png";
+import Image from "next/image";
+import Login from "./LoginModal";
+import { getTotalCartQuantity } from "../utils/cartUtils";
+import Cart from "./CartModal";
 
 const Navbar = () => {
-    const [menuOpen, setMenuOpen] = useState<boolean>(false);
-    const [isModalLoginOpen, setModalLoginOpen] = useState(false);
-    const [isModalCartOpen, setModalCartOpen] = useState(false);
-    const [cartQuantity, setCartQuantity] = useState(0);
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const [isModalLoginOpen, setModalLoginOpen] = useState(false);
+  const [isModalCartOpen, setModalCartOpen] = useState(false);
+  const [cartQuantity, setCartQuantity] = useState(0);
 
-    const pathname = usePathname();
-    const isCheckoutPage = pathname === '/checkout';
+  const pathname = usePathname();
+  const isCheckoutPage = pathname === "/checkout";
 
-    useEffect(() => {
-        const updateCartQuantity = () => {
-            const totalQuantity = getTotalCartQuantity();
-            setCartQuantity(totalQuantity);
-        };
-        // Event listener for cart updates
-        window.addEventListener('cartUpdated', updateCartQuantity);
-        // Initial cart quantity update
-        updateCartQuantity();
-        // Cleanup
-        return () => {
-            window.removeEventListener('cartUpdated', updateCartQuantity);
-        };
-    }, []);
-    const openModal = () => {
-      setModalCartOpen(true);
+  useEffect(() => {
+    const updateCartQuantity = () => {
+      const totalQuantity = getTotalCartQuantity();
+      setCartQuantity(totalQuantity);
+    };
+    // Event listener for cart updates
+    window.addEventListener("cartUpdated", updateCartQuantity);
+    // Initial cart quantity update
+    updateCartQuantity();
+    // Cleanup
+    return () => {
+      window.removeEventListener("cartUpdated", updateCartQuantity);
+    };
+  }, []);
+
+  const openModal = () => {
+    setModalCartOpen(true);
   };
-  
+
   const closeModal = () => {
-      setModalCartOpen(false);
+    setModalCartOpen(false);
   };
-    
-    const handleNav = ():void => {
-        setMenuOpen(!menuOpen);
-    }
-      
+
+  const handleNav = (): void => {
+    setMenuOpen(!menuOpen);
+  };
 
   return (
     <>
@@ -202,5 +201,5 @@ const Navbar = () => {
       )}
     </>
   );
-}
-export default Navbar
+};
+export default Navbar;
