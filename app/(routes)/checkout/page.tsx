@@ -8,7 +8,9 @@ import Link from "next/link";
 import { getSubtotalCartPrice, getTotalCartPrice } from "@/app/utils/cartUtils";
 import Logo from "@/app/assets/logo.png";
 import { createOrder } from "@/app/utils";
-import CheckoutButton from "@/app/_components/checkout-components/CheckoutButton";
+import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 interface CheckoutProduct {
   id: number;
@@ -19,6 +21,21 @@ interface CheckoutProduct {
     src: string;
   }[];
   quantity: number;
+}
+
+interface FormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  addressLine1: string;
+  addressLine2?: string; // Optional field
+  city: string;
+  country: string;
+  paymentMethod: string;
+  postalCode: string;
+  county: string;
+  termsOfService: boolean;
 }
 
 const INITIAL_FORM_STATE = {
@@ -71,12 +88,48 @@ const FORM_VALIDATION = Yup.object().shape({
     .required("Required"),
 });
 
+const stripePublicKey = `${process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!}`;
+const asyncStripe = loadStripe(stripePublicKey);
+
 const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState<CheckoutProduct[]>([]);
   const [subTotalCartPrice, setSubtotalCartPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [formData, setFormData] = useState(null);
+  const [formData, setFormData] = useState<FormData | null>(null);
+  const [triggerStripe, setTriggerStripe] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleStripePayment = async () => {
+      try {
+        const stripe = await asyncStripe;
+        if (!stripe) {
+          throw new Error("Stripe library was not properly initialized");
+        }
+
+        const response = await axios.post("/api/checkout", {
+          totalPrice,
+          cartItems,
+        });
+        const { sessionId } = response.data;
+        const { error } = await stripe.redirectToCheckout({ sessionId });
+
+        if (error) {
+          console.error(error);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    if (triggerStripe) {
+      handleStripePayment();
+      setTriggerStripe(false); 
+      setCartItems([]);
+      localStorage.setItem("cart", JSON.stringify([]));
+    }
+  }, [triggerStripe, totalPrice, cartItems]);
 
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
@@ -87,7 +140,7 @@ const CheckoutPage = () => {
   }, []);
 
   useEffect(() => {
-    if (formSubmitted && formData) {
+    if (formSubmitted && formData && formData.paymentMethod === "cash") {
       const submitOrder = async () => {
         const response = await createOrder(formData, cartItems, totalPrice);
         if (response) {
@@ -96,17 +149,22 @@ const CheckoutPage = () => {
           console.log("Error creating order");
         }
       };
-
       submitOrder();
       setFormSubmitted(false);
+      router.push("/success");
+      setCartItems([]);
+      localStorage.setItem("cart", JSON.stringify([]));
     }
-  }, [formSubmitted, formData, cartItems, totalPrice]);
+
+    if (formSubmitted && formData && formData.paymentMethod !== "cash") {
+      setTriggerStripe(true);
+      setFormSubmitted(false);
+    }
+  }, [formSubmitted, formData, cartItems, totalPrice, router]);
 
   const onFormSubmit = (values) => {
     setFormData(values);
     setFormSubmitted(true);
-    setCartItems([]);
-    localStorage.setItem("cart", JSON.stringify([]));
   };
 
   return (
@@ -122,321 +180,321 @@ const CheckoutPage = () => {
             <Formik
               initialValues={INITIAL_FORM_STATE}
               validationSchema={FORM_VALIDATION}
-              onSubmit={(values) => onFormSubmit(values)}
+              onSubmit={(values) => {
+                onFormSubmit(values);
+              }}
             >
-              {({ isValid, dirty }) => (
-                <Form>
-                  <div className="mx-auto max-w-xl">
-                    <div className="mt-3">
-                      <h2 className="text-2xl font-semibold">Contact</h2>
-                    </div>
-                    <div className="mt-4 mb-6 max-w-xl">
-                      <label htmlFor="email" className="block">
-                        E-mail
+              <Form>
+                <div className="mx-auto max-w-xl">
+                  <div className="mt-3">
+                    <h2 className="text-2xl font-semibold">Contact</h2>
+                  </div>
+                  <div className="mt-4 mb-6 max-w-xl">
+                    <label htmlFor="email" className="block">
+                      E-mail
+                    </label>
+                    <Field
+                      name="email"
+                      placeholder="Please enter your e-mail"
+                      type="text"
+                      className="mt-1 w-full border border-gray-300 rounded-md py-3 px-2"
+                    />
+                    <ErrorMessage
+                      name="email"
+                      component="div"
+                      className="text-red-600"
+                    />
+                  </div>
+                  <div className="">
+                    <h2 className="text-2xl font-semibold">Delivery</h2>
+                  </div>
+                  <div className="my-4 max-w-xl">
+                    <label htmlFor="country" className="">
+                      Country
+                    </label>
+                    <Field
+                      as="select"
+                      name="country"
+                      className="mt-1 w-full rounded-md border border-gray-300 py-3.5 px-2"
+                    >
+                      <option value="">Please select your country</option>
+                      <option value="Romania">Romania</option>
+                    </Field>
+                    <ErrorMessage
+                      name="country"
+                      component="div"
+                      className="text-red-600"
+                    />
+                  </div>
+
+                  <div className="mb-4 flex w-full flex-col md:flex-row gap-4 max-w-xl">
+                    <div className="w-full">
+                      <label htmlFor="firstName" className="">
+                        First Name
                       </label>
                       <Field
-                        name="email"
-                        placeholder="Please enter your e-mail"
+                        name="firstName"
+                        placeholder="Please enter your first name"
                         type="text"
-                        className="mt-1 w-full border border-gray-300 rounded-md py-3 px-2"
+                        className="mt-1 w-full rounded-md border border-gray-300 py-3 px-2"
                       />
                       <ErrorMessage
-                        name="email"
+                        name="firstName"
                         component="div"
                         className="text-red-600"
                       />
                     </div>
-                    <div className="">
-                      <h2 className="text-2xl font-semibold">Delivery</h2>
-                    </div>
-                    <div className="my-4 max-w-xl">
-                      <label htmlFor="country" className="">
-                        Country
+                    <div className="w-full">
+                      <label htmlFor="lasName" className="">
+                        Last Name
                       </label>
                       <Field
-                        as="select"
-                        name="country"
-                        className="mt-1 w-full rounded-md border border-gray-300 py-3.5 px-2"
-                      >
-                        <option value="">Please select your country</option>
-                        <option value="Romania">Romania</option>
-                      </Field>
-                      <ErrorMessage
-                        name="country"
-                        component="div"
-                        className="text-red-600"
-                      />
-                    </div>
-
-                    <div className="mb-4 flex w-full flex-col md:flex-row gap-4 max-w-xl">
-                      <div className="w-full">
-                        <label htmlFor="firstName" className="">
-                          First Name
-                        </label>
-                        <Field
-                          name="firstName"
-                          placeholder="Please enter your first name"
-                          type="text"
-                          className="mt-1 w-full rounded-md border border-gray-300 py-3 px-2"
-                        />
-                        <ErrorMessage
-                          name="firstName"
-                          component="div"
-                          className="text-red-600"
-                        />
-                      </div>
-                      <div className="w-full">
-                        <label htmlFor="lasName" className="">
-                          Last Name
-                        </label>
-                        <Field
-                          name="lastName"
-                          placeholder="Please enter your last name"
-                          type="text"
-                          className="mt-1 w-full rounded-md border border-gray-300 py-3 px-2"
-                        />
-                        <ErrorMessage
-                          name="lastName"
-                          component="div"
-                          className="text-red-600"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="mb-4 max-w-xl">
-                      <label htmlFor="addressLine1" className="block">
-                        Adress
-                      </label>
-                      <Field
-                        name="addressLine1"
-                        placeholder="Please enter your adress"
+                        name="lastName"
+                        placeholder="Please enter your last name"
                         type="text"
-                        className="mt-1 block w-full rounded-md border border-gray-300 py-3 px-2"
+                        className="mt-1 w-full rounded-md border border-gray-300 py-3 px-2"
                       />
                       <ErrorMessage
-                        name="addressLine1"
+                        name="lastName"
                         component="div"
                         className="text-red-600"
-                      />
-                    </div>
-
-                    <div className="mb-4 max-w-xl">
-                      <label htmlFor="addressLine2" className="block">
-                        Apartment, suite, etc. (optional)
-                      </label>
-                      <Field
-                        name="addressLine2"
-                        placeholder="Please enter your optional details"
-                        type="text"
-                        className="mt-1 block w-full rounded-md border border-gray-300 py-3 px-2"
-                      />
-                      <ErrorMessage
-                        name="addressLine2"
-                        component="div"
-                        className="text-red-600"
-                      />
-                    </div>
-
-                    <div className="mb-4 flex w-full flex-col md:flex-row gap-4 max-w-xl">
-                      <div className="w-full">
-                        <label htmlFor="postalCode" className="block">
-                          Postal Code
-                        </label>
-                        <Field
-                          name="postalCode"
-                          placeholder="Please enter your postal code"
-                          type="text"
-                          className="mt-1 block w-full rounded-md border border-gray-300 py-3 px-2"
-                        />
-                        <ErrorMessage
-                          name="postalCode"
-                          component="div"
-                          className="text-red-600"
-                        />
-                      </div>
-
-                      <div className="w-full">
-                        <label htmlFor="city" className="block">
-                          City
-                        </label>
-                        <Field
-                          name="city"
-                          placeholder="Please enter your city"
-                          type="text"
-                          className="mt-1 block w-full rounded-md border border-gray-300 py-3 px-2"
-                        />
-                        <ErrorMessage
-                          name="city"
-                          component="div"
-                          className="text-red-600"
-                        />
-                      </div>
-
-                      <div className="w-full">
-                        <label htmlFor="county" className="block">
-                          County
-                        </label>
-                        <Field
-                          name="county"
-                          placeholder="Please enter your county"
-                          type="text"
-                          className="mt-1 block w-full rounded-md border border-gray-300 py-3 px-2"
-                        />
-                        <ErrorMessage
-                          name="county"
-                          component="div"
-                          className="text-red-600"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="mb-4 max-w-xl">
-                      <label htmlFor="phone" className="block">
-                        Phone
-                      </label>
-                      <Field
-                        name="phone"
-                        placeholder="Please enter your phone"
-                        type="text"
-                        className="mt-1 block w-full rounded-md border border-gray-300 py-3 px-2"
-                      />
-                      <ErrorMessage
-                        name="phone"
-                        component="div"
-                        className="text-red-600"
-                      />
-                    </div>
-
-                    <div className="my-8 max-w-xl">
-                      <h2 className="text-xl font-semibold mb-2">Courier</h2>
-                      <div>
-                        <p className="flex border border-gray-400 rounded-md p-3.5 cursor-pointer justify-between bg-blue-100 w-full">
-                          Sameday Curier
-                          <span className="font-semibold">19.99 RON</span>
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Payment form select */}
-
-                    <PaymentLabel />
-
-                    <div className="orderlist lg:hidden lg:w-2/5 py-4">
-                      <div className="w-full">
-                        <div className="mx-auto max-w-xl mb-6">
-                          <h2 className="text-2xl font-semibold">
-                            Order Summary
-                          </h2>
-                        </div>
-                        <div className="mx-auto max-w-xl">
-                          <ul>
-                            {cartItems.map((item, index) => (
-                              <li key={item.id + "-" + index} className="">
-                                <div className="flex w-full flex-row justify-between py-2">
-                                  <div className="absolute z-40 -mt-2 ml-[53px]">
-                                    <div className="flex items-center justify-center h-[22px] w-[22px] rounded-full bg-neutral-500">
-                                      <p className="text-sm text-white">
-                                        {item.quantity}
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <div className="z-30 flex flex-row space-x-4">
-                                    <div className="relative h-[68px] w-[68px] cursor-pointer overflow-hidden rounded-md border border-neutral-300 bg-neutral-300">
-                                      <Image
-                                        width="64"
-                                        height="64"
-                                        alt="Product img"
-                                        className="h-full w-full object-cover"
-                                        src={item.images[0].src}
-                                      />
-                                    </div>
-                                    <div className="flex flex-1 flex-col text-base">
-                                      <span className="font-medium">
-                                        {item.name}
-                                      </span>
-                                      <span className="text-gray-400 font-normal">
-                                        {item.size}
-                                      </span>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-center">
-                                    <p className="text-sm">
-                                      {item.price},00
-                                      <span className="ml-1 inline">RON</span>
-                                    </p>
-                                  </div>
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
-                          <div className="flex mx-auto max-w-xl mt-4 gap-4">
-                            <input
-                              type="text"
-                              placeholder="Enter coupon code"
-                              className="w-5/6 border border-gray-300 rounded-md p-3"
-                            />
-                            <button className="w-1/6 bg-gray-100 font-semibold border border-gray-300 text-gray-500 rounded-md">
-                              Apply
-                            </button>
-                          </div>
-                          <div className="flex justify-between mt-6">
-                            <p>Subtotal</p>
-                            <p className="font-semibold">
-                              {subTotalCartPrice.toLocaleString("ro-RO", {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                              })}
-                              <span className="ml-1">RON</span>
-                            </p>
-                          </div>
-                          <div className="flex justify-between mt-3">
-                            <p>Transport</p>
-                            <p className="">
-                              {totalPrice >= 300 ? "Gratuit" : "19.99 RON"}
-                            </p>
-                          </div>
-                          <div className="flex justify-between mt-3 text-lg font-bold">
-                            <p>Total</p>
-                            <p className="font-semibold">
-                              {totalPrice.toLocaleString("ro-RO", {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                              })}
-                              <span className="ml-1">RON</span>
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="max-w-xl">
-                      <label className="inline-flex items-center mt-3">
-                        <Field
-                          type="checkbox"
-                          name="termsOfService"
-                          className="form-checkbox h-5 w-5 text-gray-600"
-                        />
-                        <span className="ml-2 text-gray-700">
-                          I agree to the Terms of Service
-                        </span>
-                      </label>
-                      <ErrorMessage
-                        name="termsOfService"
-                        component="div"
-                        className="text-red-600"
-                      />
-                    </div>
-                    <div className="max-w-xl my-6">
-                      <CheckoutButton
-                        dirty={dirty}
-                        isValid={isValid}
-                        totalPrice={totalPrice}
-                        cartItems={cartItems}
                       />
                     </div>
                   </div>
-                </Form>
-              )}
+
+                  <div className="mb-4 max-w-xl">
+                    <label htmlFor="addressLine1" className="block">
+                      Adress
+                    </label>
+                    <Field
+                      name="addressLine1"
+                      placeholder="Please enter your adress"
+                      type="text"
+                      className="mt-1 block w-full rounded-md border border-gray-300 py-3 px-2"
+                    />
+                    <ErrorMessage
+                      name="addressLine1"
+                      component="div"
+                      className="text-red-600"
+                    />
+                  </div>
+
+                  <div className="mb-4 max-w-xl">
+                    <label htmlFor="addressLine2" className="block">
+                      Apartment, suite, etc. (optional)
+                    </label>
+                    <Field
+                      name="addressLine2"
+                      placeholder="Please enter your optional details"
+                      type="text"
+                      className="mt-1 block w-full rounded-md border border-gray-300 py-3 px-2"
+                    />
+                    <ErrorMessage
+                      name="addressLine2"
+                      component="div"
+                      className="text-red-600"
+                    />
+                  </div>
+
+                  <div className="mb-4 flex w-full flex-col md:flex-row gap-4 max-w-xl">
+                    <div className="w-full">
+                      <label htmlFor="postalCode" className="block">
+                        Postal Code
+                      </label>
+                      <Field
+                        name="postalCode"
+                        placeholder="Please enter your postal code"
+                        type="text"
+                        className="mt-1 block w-full rounded-md border border-gray-300 py-3 px-2"
+                      />
+                      <ErrorMessage
+                        name="postalCode"
+                        component="div"
+                        className="text-red-600"
+                      />
+                    </div>
+
+                    <div className="w-full">
+                      <label htmlFor="city" className="block">
+                        City
+                      </label>
+                      <Field
+                        name="city"
+                        placeholder="Please enter your city"
+                        type="text"
+                        className="mt-1 block w-full rounded-md border border-gray-300 py-3 px-2"
+                      />
+                      <ErrorMessage
+                        name="city"
+                        component="div"
+                        className="text-red-600"
+                      />
+                    </div>
+
+                    <div className="w-full">
+                      <label htmlFor="county" className="block">
+                        County
+                      </label>
+                      <Field
+                        name="county"
+                        placeholder="Please enter your county"
+                        type="text"
+                        className="mt-1 block w-full rounded-md border border-gray-300 py-3 px-2"
+                      />
+                      <ErrorMessage
+                        name="county"
+                        component="div"
+                        className="text-red-600"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mb-4 max-w-xl">
+                    <label htmlFor="phone" className="block">
+                      Phone
+                    </label>
+                    <Field
+                      name="phone"
+                      placeholder="Please enter your phone"
+                      type="text"
+                      className="mt-1 block w-full rounded-md border border-gray-300 py-3 px-2"
+                    />
+                    <ErrorMessage
+                      name="phone"
+                      component="div"
+                      className="text-red-600"
+                    />
+                  </div>
+
+                  <div className="my-8 max-w-xl">
+                    <h2 className="text-xl font-semibold mb-2">Courier</h2>
+                    <div>
+                      <p className="flex border border-gray-400 rounded-md p-3.5 cursor-pointer justify-between bg-blue-100 w-full">
+                        Sameday Curier
+                        <span className="font-semibold">19.99 RON</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Payment form select */}
+
+                  <PaymentLabel />
+
+                  <div className="orderlist lg:hidden lg:w-2/5 py-4">
+                    <div className="w-full">
+                      <div className="mx-auto max-w-xl mb-6">
+                        <h2 className="text-2xl font-semibold">
+                          Order Summary
+                        </h2>
+                      </div>
+                      <div className="mx-auto max-w-xl">
+                        <ul>
+                          {cartItems.map((item, index) => (
+                            <li key={item.id + "-" + index} className="">
+                              <div className="flex w-full flex-row justify-between py-2">
+                                <div className="absolute z-40 -mt-2 ml-[53px]">
+                                  <div className="flex items-center justify-center h-[22px] w-[22px] rounded-full bg-neutral-500">
+                                    <p className="text-sm text-white">
+                                      {item.quantity}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="z-30 flex flex-row space-x-4">
+                                  <div className="relative h-[68px] w-[68px] cursor-pointer overflow-hidden rounded-md border border-neutral-300 bg-neutral-300">
+                                    <Image
+                                      width="64"
+                                      height="64"
+                                      alt="Product img"
+                                      className="h-full w-full object-cover"
+                                      src={item.images[0].src}
+                                    />
+                                  </div>
+                                  <div className="flex flex-1 flex-col text-base">
+                                    <span className="font-medium">
+                                      {item.name}
+                                    </span>
+                                    <span className="text-gray-400 font-normal">
+                                      {item.size}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="flex items-center">
+                                  <p className="text-sm">
+                                    {item.price},00
+                                    <span className="ml-1 inline">RON</span>
+                                  </p>
+                                </div>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="flex mx-auto max-w-xl mt-4 gap-4">
+                          <input
+                            type="text"
+                            placeholder="Enter coupon code"
+                            className="w-5/6 border border-gray-300 rounded-md p-3"
+                          />
+                          <button className="w-1/6 bg-gray-100 font-semibold border border-gray-300 text-gray-500 rounded-md">
+                            Apply
+                          </button>
+                        </div>
+                        <div className="flex justify-between mt-6">
+                          <p>Subtotal</p>
+                          <p className="font-semibold">
+                            {subTotalCartPrice.toLocaleString("ro-RO", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
+                            <span className="ml-1">RON</span>
+                          </p>
+                        </div>
+                        <div className="flex justify-between mt-3">
+                          <p>Transport</p>
+                          <p className="">
+                            {totalPrice >= 300 ? "Gratuit" : "19.99 RON"}
+                          </p>
+                        </div>
+                        <div className="flex justify-between mt-3 text-lg font-bold">
+                          <p>Total</p>
+                          <p className="font-semibold">
+                            {totalPrice.toLocaleString("ro-RO", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
+                            <span className="ml-1">RON</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="max-w-xl">
+                    <label className="inline-flex items-center mt-3">
+                      <Field
+                        type="checkbox"
+                        name="termsOfService"
+                        className="form-checkbox h-5 w-5 text-gray-600"
+                      />
+                      <span className="ml-2 text-gray-700">
+                        I agree to the Terms of Service
+                      </span>
+                    </label>
+                    <ErrorMessage
+                      name="termsOfService"
+                      component="div"
+                      className="text-red-600"
+                    />
+                  </div>
+                  <div className="max-w-xl my-6">
+                    <button
+                      type="submit"
+                      className="w-full bg-blue-500 hover:bg-blue-700 text-white text-xl font-semibold py-3.5 px-4 rounded"
+                    >
+                      Complete the order
+                    </button>
+                  </div>
+                </div>
+              </Form>
             </Formik>
           </div>
           <div className="orderlist hidden lg:block lg:w-2/5 py-4 border-l border-r bg-gray-100 border-gray-300 pt-8 px-10">
