@@ -20,6 +20,7 @@ const Navbar = () => {
 
   const pathname = usePathname();
   const isCheckoutPage = pathname === "/checkout";
+  const isSuccessPage = pathname.startsWith('/success/') && pathname.split('/').length > 2;
 
   useEffect(() => {
     const updateCartQuantity = () => {
@@ -50,7 +51,7 @@ const Navbar = () => {
 
   return (
     <>
-      {!isCheckoutPage && (
+      {!isCheckoutPage && !isSuccessPage && (
         <nav className="relative flex items-center justify-between p-4">
           <div onClick={handleNav} className="block flex-none md:hidden">
             <button className="flex h-11 w-11 items-center justify-center rounded-md border border-gray-300 text-black transition-colors active:bg-gray-400">

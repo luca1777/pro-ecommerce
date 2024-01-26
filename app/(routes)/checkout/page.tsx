@@ -145,13 +145,13 @@ const CheckoutPage = () => {
         const response = await createOrder(formData, cartItems, totalPrice);
         if (response) {
           console.log("Order created successfully:", response);
+          router.push(`/success/${response.data.id}`);
         } else {
           console.log("Error creating order");
         }
       };
       submitOrder();
       setFormSubmitted(false);
-      router.push("/success");
       setCartItems([]);
       localStorage.setItem("cart", JSON.stringify([]));
     }

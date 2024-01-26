@@ -4,6 +4,12 @@ const baseURL = "https://apollo.code-village.ro/wp-json/wc/v3";
 const username = "ck_3d06586e1a83d260041f72db0404f0ca5102f1f7";
 const password = "cs_3e7b2d095ecf51ec04a162882e3dd595eaab9cbd";
 
+interface OrderResponse {
+    data: {
+      id: number;
+      // ... other properties
+    };
+  }
 
 export const getProducts = async () => {
 
@@ -203,7 +209,7 @@ export const getSingleProduct = async (prodId: number) => {
 
 }
 
-export const createOrder = async (formData, cartItems, totalPrice) => {
+export const createOrder = async (formData, cartItems, totalPrice): Promise<OrderResponse | null> => {
 
     try {
         const resData = await axios.post(`${baseURL}/orders`, dataOrder(formData, cartItems, totalPrice), {
@@ -218,7 +224,7 @@ export const createOrder = async (formData, cartItems, totalPrice) => {
 
     } catch (error) {
         console.log('There was an error creating the order:', error);
-        return [];
+        return null;
     }
 }
 
