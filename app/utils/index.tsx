@@ -228,6 +228,20 @@ export const createOrder = async (formData, cartItems, totalPrice): Promise<Orde
     }
 }
 
+export const getOrder = async (orderId) => {
+    try {
+        const resData = await axios.get(`${baseURL}/orders/${orderId}`, {
+            params: {
+                consumer_key: username,
+                consumer_secret: password,
+            }
+        });
+        return resData.data;
+    } catch (error) {
+        console.log('There was an error with getting the order:', error);
+        return [];
+    }
+}
 
 const dataOrder = (formData, cartItems, totalPrice) => {
     const lineItems = cartItems.map(item => ({
