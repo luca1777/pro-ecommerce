@@ -63,7 +63,7 @@ const Success = async ({ params }) => {
                 </div>
               </div>
               <div className="">
-                <Image src={Curier} alt="curier"></Image>
+                <Image width={600} height={600} src={Curier} alt="curier"></Image>
               </div>
               <div className="border rounded-md border-gray-300 overflow-hidden">
                 <p className="px-4 pt-4 text-2xl font-semibold">
