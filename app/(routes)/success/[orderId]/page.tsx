@@ -5,6 +5,7 @@ import Logo from "@/app/assets/logo.png";
 import { PiCheckCircleThin } from "react-icons/pi";
 import { getOrder } from "@/app/utils";
 import Curier from "@/app/assets/curier.png";
+import SuccessOrderSummary from "@/app/_components/checkout-components/SuccessOrderSummary";
 
 interface LineItem {
   id: number;
@@ -43,12 +44,13 @@ const Success = async ({ params }) => {
     <div className="relative border-b border-gray-300">
       <div className="max-w-screen-xl mx-auto w-full">
         <div className="flex flex-col lg:flex-row">
-          <div className="p-5 lg:w-3/5 border-r border-l border-gray-300 bg-white">
-            <header className="w-full h-[90px] border-b border-gray-300 flex items-center justify-center bg-white">
+          <div className="p-5 lg:w-3/5 lg:border-r lgborder-l border-gray-300 bg-white">
+            <header className="w-full h-[90px] lg:border-b border-gray-300 flex items-center justify-center bg-white">
               <Link href="/">
-                <Image className="h-12 w-16" src={Logo} alt="logo" />
+                <Image height={48} width={64} src={Logo} alt="logo" />
               </Link>
             </header>
+            <SuccessOrderSummary dataOrder={dataOrder} />
             <div className="pt-4 px-4 mx-auto max-w-xl">
               <div className="flex flex-row gap-2">
                 <div>
@@ -63,7 +65,12 @@ const Success = async ({ params }) => {
                 </div>
               </div>
               <div className="">
-                <Image width={600} height={600} src={Curier} alt="curier"></Image>
+                <Image
+                  width={600}
+                  height={600}
+                  src={Curier}
+                  alt="curier"
+                ></Image>
               </div>
               <div className="border rounded-md border-gray-300 overflow-hidden">
                 <p className="px-4 pt-4 text-2xl font-semibold">
@@ -71,9 +78,15 @@ const Success = async ({ params }) => {
                 </p>
                 <div className="p-4 flex w-full">
                   <div className="w-1/2 pr-4">
-                    <p className="font-semibold pb-1 break-words">Contact information</p>
-                    <p className="pb-4 break-words">{dataOrder.billing.email}</p>
-                    <p className="font-semibold pb-1 break-words">Shipping address</p>
+                    <p className="font-semibold pb-1 break-words">
+                      Contact information
+                    </p>
+                    <p className="pb-4 break-words">
+                      {dataOrder.billing.email}
+                    </p>
+                    <p className="font-semibold pb-1 break-words">
+                      Shipping address
+                    </p>
                     <p className="break-words">
                       {dataOrder.billing.first_name}{" "}
                       {dataOrder.billing.last_name}
@@ -85,20 +98,28 @@ const Success = async ({ params }) => {
                       {dataOrder.billing.state}
                     </p>
                     <p className="break-words">{dataOrder.billing.country}</p>
-                    <p className="pb-4 break-words">{dataOrder.billing.phone}</p>
-                    <p className="font-semibold pb-1 break-words">Metoda de expediere</p>
+                    <p className="pb-4 break-words">
+                      {dataOrder.billing.phone}
+                    </p>
+                    <p className="font-semibold pb-1 break-words">
+                      Metoda de expediere
+                    </p>
                     <p className="break-words">Sameday Courier</p>
                   </div>
                   <div className="w-1/2 break-words pl-4">
-                    <p className="font-semibold pb-1 break-words">Payment Method</p>
+                    <p className="font-semibold pb-1 break-words">
+                      Payment Method
+                    </p>
                     <p className="pb-4 break-words">
                       Cash on delivery
                       <span className="font-semibold break-words">
                         {" "}
-                        - {dataOrder.total} RON
+                        - {dataOrder.total.replace(".", ",")} RON
                       </span>
                     </p>
-                    <p className="font-semibold pb-1 break-words">Billing Adress</p>
+                    <p className="font-semibold pb-1 break-words">
+                      Billing Adress
+                    </p>
                     <p className="break-words">
                       {dataOrder.billing.first_name}{" "}
                       {dataOrder.billing.last_name}
@@ -110,13 +131,34 @@ const Success = async ({ params }) => {
                       {dataOrder.billing.state}
                     </p>
                     <p className="break-words">{dataOrder.billing.country}</p>
-                    <p className="pb-4 break-words">{dataOrder.billing.phone}</p>
+                    <p className="pb-4 break-words">
+                      {dataOrder.billing.phone}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="">
+                <div className="flex justify-between py-10 items-center">
+                  <div>
+                    <p>
+                      Do you need help?{" "}
+                      <span className="hover:underline text-[#1773B0] font-semibold">
+                        <Link href="mailto:pro-ecommerce@pro-ecommerce.com">
+                          Contact us
+                        </Link>
+                      </span>
+                    </p>
+                  </div>
+                  <div>
+                    <button className="border font-semibold rounded-md p-4 bg-blue-500 hover:bg-blue-700 text-white">
+                      <Link href="/">Continue shopping</Link>
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="w-full lg:w-2/5 border-r p-5 bg-white lg:bg-gray-200 lg:bg-opacity-50 border-gray-300">
+          <div className="hidden lg:block w-full lg:w-2/5 border-r p-5 bg-white lg:bg-gray-200 lg:bg-opacity-50 border-gray-300">
             <div className="w-full">
               <div className="mx-auto max-w-xl mb-6 px-6">
                 <h2 className="text-2xl font-semibold">Order Summary</h2>
@@ -162,8 +204,10 @@ const Success = async ({ params }) => {
                   <p className="font-semibold">
                     {(parseFloat(dataOrder.total) >= 300
                       ? parseFloat(dataOrder.total)
-                      : parseFloat(dataOrder.total) - 19.99
-                    ).toFixed(2)}
+                      : parseFloat(dataOrder.total) - 19,
+                    99)
+                      .toFixed(2)
+                      .replace(".", ",")}
                     <span className="ml-1">RON</span>
                   </p>
                 </div>
@@ -178,7 +222,7 @@ const Success = async ({ params }) => {
                 <div className="flex justify-between mt-4 text-lg font-bold">
                   <p>Total</p>
                   <p className="font-semibold">
-                    {dataOrder.total}
+                    {dataOrder.total.replace(".", ",")}
                     <span className="ml-1">RON</span>
                   </p>
                 </div>
