@@ -109,6 +109,7 @@ const CheckoutPage = () => {
         }
 
         const response = await axios.post("/api/checkout", {
+          formData,
           totalPrice,
           cartItems,
         });
@@ -129,7 +130,7 @@ const CheckoutPage = () => {
       setCartItems([]);
       localStorage.setItem("cart", JSON.stringify([]));
     }
-  }, [triggerStripe, totalPrice, cartItems]);
+  }, [triggerStripe, formData,  totalPrice, cartItems]);
 
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
