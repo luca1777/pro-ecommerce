@@ -7,7 +7,7 @@ const host = process.env.NEXT_PUBLIC_HOST || 'http://localhost:3000';
 
 export async function POST(request: NextRequest) {
   try {
-    const { cartItems, totalPrice } = await request.json();
+    const { formData, cartItems, totalPrice } = await request.json();
 
     const lineItems = cartItems.map(item => ({
         price_data: {
@@ -39,6 +39,10 @@ export async function POST(request: NextRequest) {
         mode: "payment",
         cancel_url: `${host}`,
         success_url: `${host}/success`,
+        metadata: {
+          cartItems: JSON.stringify(cartItems),
+          formData: JSON.stringify(formData), 
+        },
       });
 
     return NextResponse.json({ sessionId: session.id });
