@@ -29,8 +29,6 @@ export async function POST(req: Request) {
 
       const cartItems = JSON.parse(session.metadata.cartItems);
 
-      console.log("aiciiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii", cartItems)
-
       if (!Array.isArray(cartItems)) {
         console.error("cartItems nu este un array: ", cartItems);
         return NextResponse.json({ message: "cartItems nu este un array", ok: false }, { status: 500 });
