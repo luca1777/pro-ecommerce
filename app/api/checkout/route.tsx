@@ -32,6 +32,14 @@ export async function POST(request: NextRequest) {
         },
         quantity: 1,
       });
+
+     const shorterListOfCartItems = cartItems.map( p => ({
+       id:p.id,
+       name:p.name,
+       price:30,
+       size: 'M',
+       quantity: 1
+     }))
   
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
@@ -40,7 +48,7 @@ export async function POST(request: NextRequest) {
         cancel_url: `${host}`,
         success_url: `${host}/success`,
         metadata: {
-          cartItems: JSON.stringify(cartItems),
+          cartItems: JSON.stringify(shorterListOfCartItems),
           formData: JSON.stringify(formData), 
         },
       });
