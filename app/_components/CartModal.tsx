@@ -50,7 +50,6 @@ const Cart = ({ closeModal }) => {
     };
   }, []);
 
-  console.log(cartItems);
   return (
     <div>
       {showNotification && <DemoNotification />}

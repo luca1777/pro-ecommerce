@@ -182,7 +182,7 @@ export const getCategories = async () => {
             }
         })
 
-        return resData.data;
+        return resData.data; 
     }catch (error) {
         console.log(error);
         return[];
@@ -198,7 +198,6 @@ export const getSingleProduct = async (prodId: number) => {
             }
         })
 
-        console.log(resData.data)
 
         return resData.data;
 
