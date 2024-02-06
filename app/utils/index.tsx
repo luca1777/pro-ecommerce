@@ -208,10 +208,10 @@ export const getSingleProduct = async (prodId: number) => {
 
 }
 
-export const createOrder = async (formData, cartItems, totalPrice): Promise<OrderResponse | null> => {
+export const createOrder = async (formData, cartItems, subTotalPrice): Promise<OrderResponse | null> => {
 
     try {
-        const resData = await axios.post(`${baseURL}/orders`, dataOrder(formData, cartItems, totalPrice), {
+        const resData = await axios.post(`${baseURL}/orders`, dataOrder(formData, cartItems, subTotalPrice), {
             params: {
                 consumer_key: username,
                 consumer_secret: password,
@@ -242,7 +242,7 @@ export const getOrder = async (orderId) => {
     }
 }
 
-const dataOrder = (formData, cartItems, totalPrice) => {
+const dataOrder = (formData, cartItems, subTotalPrice) => {
     const lineItems = cartItems.map(item => ({
         product_id: item.id,
         quantity: item.quantity
@@ -280,7 +280,7 @@ const dataOrder = (formData, cartItems, totalPrice) => {
       {
         method_id: "flat_rate",
         method_title: "Flat Rate",
-        total: totalPrice >= 300 ? "" : "19.99",
+        total: subTotalPrice >= 300 ? "0.00" : "19.99",
       },
     ],
   };

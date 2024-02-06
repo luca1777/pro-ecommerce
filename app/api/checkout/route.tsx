@@ -7,7 +7,7 @@ const host = process.env.NEXT_PUBLIC_HOST || 'http://localhost:3000';
 
 export async function POST(request: NextRequest) {
   try {
-    const { formData, cartItems, totalPrice } = await request.json();
+    const { formData, cartItems, subTotalCartPrice } = await request.json();
 
     const lineItems = cartItems.map(item => ({
         price_data: {
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
         quantity: item.quantity,
       }));
 
-      const shippingFee =  totalPrice >= 300 ? 0 : 1999; 
+      const shippingFee = subTotalCartPrice >= 300 ? 0 : 1999; 
       lineItems.push({
         price_data: {
           currency: 'ron',
@@ -47,13 +47,13 @@ export async function POST(request: NextRequest) {
         metadata: {
           cartItems: JSON.stringify(shorterListOfCartItems),
           formData: JSON.stringify(formData), 
-          shippingFee: JSON.stringify(shippingFee),
         },
       });
 
     return NextResponse.json({ sessionId: session.id });
 
   } catch (err) {
+    console.log(err);
     return NextResponse.json({ error: "Error in checkout session" }, { status: 500});
   }
 }

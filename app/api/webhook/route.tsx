@@ -34,11 +34,9 @@ export async function POST(req: Request) {
         );
       }
 
-      console.log(session)
-      const totalPrice = JSON.parse(session.metadata.shippingFee);
+      const amountSubTotal = session.amount_total / 100 - 19.99;
 
-
-      const orderResponse = await createOrder(formData, cartItems, totalPrice);
+      const orderResponse = await createOrder(formData, cartItems, amountSubTotal);
 
       if (orderResponse) {
         console.log("Order created successfully", orderResponse.data);

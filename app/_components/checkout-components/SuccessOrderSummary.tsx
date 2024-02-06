@@ -8,6 +8,9 @@ import { IoIosArrowUp } from "react-icons/io";
 const SuccessOrderSummary = ({ dataOrder }) => {
   const [showOrder, setShowOrder] = useState(false);
   
+  let subTotal = dataOrder.line_items.reduce((acc, item) => acc + parseFloat(item.subtotal), 0);
+
+
   const handlerShowOrder = () => {
     setShowOrder(!showOrder);
   };
@@ -36,7 +39,7 @@ const SuccessOrderSummary = ({ dataOrder }) => {
       </div>
       <div>
         {showOrder ? (
-          <div className="bg-gray-100 mx-[-20px] border-b border-gray-300">
+          <div className="lg:hidden bg-gray-100 mx-[-20px] border-b border-gray-300">
               <div className="mx-auto max-w-xl mb-6 px-6 pt-4">
                 <h2 className="text-2xl font-semibold">Order Summary</h2>
               </div>
@@ -79,19 +82,14 @@ const SuccessOrderSummary = ({ dataOrder }) => {
                 <div className="flex justify-between mt-4">
                   <p>Subtotal</p>
                   <p className="font-semibold">
-                    {(parseFloat(dataOrder.total) >= 300
-                      ? parseFloat(dataOrder.total)
-                      : parseFloat(dataOrder.total) - 19,
-                    99)
-                      .toFixed(2)
-                      .replace(".", ",")}
+                  {subTotal.toFixed(2).replace(".", ",")}
                     <span className="ml-1">RON</span>
                   </p>
                 </div>
                 <div className="flex justify-between mt-3 pb-4 border-b border-gray-300">
                   <p>Transport</p>
                   <p className="">
-                    {parseFloat(dataOrder.total) >= 300
+                  {subTotal >= 300
                       ? "Gratuit"
                       : "19,99 RON"}
                   </p>

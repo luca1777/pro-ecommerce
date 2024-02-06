@@ -12,6 +12,7 @@ interface LineItem {
   name: string;
   quantity: number;
   price: string;
+  subtotal: string;
   image: {
     src: string;
   };
@@ -39,6 +40,8 @@ interface DataOrder {
 const Success = async ({ params }) => {
   const orderId = params.orderId;
   const dataOrder: DataOrder = await getOrder(orderId);
+
+  let subTotal = dataOrder.line_items.reduce((acc, item) => acc + parseFloat(item.subtotal), 0);
 
   return (
     <div className="relative border-b border-gray-300">
@@ -202,19 +205,14 @@ const Success = async ({ params }) => {
                 <div className="flex justify-between mt-4">
                   <p>Subtotal</p>
                   <p className="font-semibold">
-                    {(parseFloat(dataOrder.total) >= 300
-                      ? parseFloat(dataOrder.total)
-                      : parseFloat(dataOrder.total) - 19,
-                    99)
-                      .toFixed(2)
-                      .replace(".", ",")}
+                  {subTotal.toFixed(2).replace(".", ",")}
                     <span className="ml-1">RON</span>
                   </p>
                 </div>
                 <div className="flex justify-between mt-3 pb-4 border-b border-gray-300">
                   <p>Transport</p>
                   <p className="">
-                    {parseFloat(dataOrder.total) >= 300
+                    {subTotal >= 300
                       ? "Gratuit"
                       : "19,99 RON"}
                   </p>
