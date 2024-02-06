@@ -110,7 +110,7 @@ const CheckoutPage = () => {
 
         const response = await axios.post("/api/checkout", {
           formData,
-          totalPrice,
+          subTotalCartPrice,
           cartItems,
         });
         const { sessionId } = response.data;
@@ -130,7 +130,7 @@ const CheckoutPage = () => {
       setCartItems([]);
       localStorage.setItem("cart", JSON.stringify([]));
     }
-  }, [triggerStripe, formData,  totalPrice, cartItems]);
+  }, [triggerStripe, formData,  subTotalCartPrice, cartItems]);
 
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
@@ -143,7 +143,7 @@ const CheckoutPage = () => {
   useEffect(() => {
     if (formSubmitted && formData && formData.paymentMethod === "cash") {
       const submitOrder = async () => {
-        const response = await createOrder(formData, cartItems, totalPrice);
+        const response = await createOrder(formData, cartItems, subTotalCartPrice);
         if (response) {
           console.log("Order created successfully:", response);
           router.push(`/success/${response.data.id}`);
@@ -161,7 +161,7 @@ const CheckoutPage = () => {
       setTriggerStripe(true);
       setFormSubmitted(false);
     }
-  }, [formSubmitted, formData, cartItems, totalPrice, router]);
+  }, [formSubmitted, formData, cartItems, subTotalCartPrice, router]);
 
   const onFormSubmit = (values) => {
     setFormData(values);
@@ -565,7 +565,7 @@ const CheckoutPage = () => {
                 <div className="flex justify-between mt-3">
                   <p>Transport</p>
                   <p className="">
-                    {totalPrice >= 300 ? "Gratuit" : "19.99 RON"}
+                    {subTotalCartPrice >= 300 ? "Gratuit" : "19.99 RON"}
                   </p>
                 </div>
                 <div className="flex justify-between mt-3 text-lg font-bold">
