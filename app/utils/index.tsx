@@ -241,6 +241,24 @@ export const getOrder = async (orderId) => {
     }
 }
 
+export const updateStatusOrder = async (orderId, newStatus, isPaid) => {
+    try {
+        const resData = await axios.put(`${baseURL}/orders/${orderId}`, {
+            set_paid: isPaid,
+            status: newStatus
+        }, {
+            params: {
+                consumer_key: username,
+                consumer_secret: password,
+            }
+        });
+        return resData.data;
+    } catch (error) {
+        console.log('There was an error with getting the order:', error);
+        return [];
+    }
+}
+
 const dataOrder = (formData, cartItems, subTotalPrice) => {
     const lineItems = cartItems.map(item => ({
         product_id: item.id,
@@ -250,8 +268,8 @@ const dataOrder = (formData, cartItems, subTotalPrice) => {
   return {
     payment_method: formData.paymentMethod === "cash" ? "cod" : "bacs",
     payment_method_title: formData.paymentMethod === "cash" ? "Cash on Delivery" : "Direct Bank Transfer",
-    set_paid: formData.paymentMethod === "cash" ? false : true,
-    status: formData.paymentMethod === "cash" ? "processing" : "completed",
+    set_paid: false,
+    status: formData.paymentMethod === "cash" ? "processing" : "pending",
     billing: {
         first_name: formData.firstName,
         last_name: formData.lastName,
