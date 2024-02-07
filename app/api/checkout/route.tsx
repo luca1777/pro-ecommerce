@@ -4,7 +4,7 @@ import { createOrder } from "@/app/utils";
 
 const stripeKey = `${process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!}`;
 const stripe = new Stripe(stripeKey);
-const host = process.env.NEXT_PUBLIC_HOST || 'http://localhost:3000';
+const host = process.env.NEXT_PUBLIC_HOST || 'http://localhost:3000/';
 
 export async function POST(request: NextRequest) {
   try {
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
         line_items: lineItems,
         mode: "payment",
         cancel_url: `${host}`,
-        success_url: `${host}/success/${orderResponse?.data.id}`,
+        success_url: `${host}success/${orderResponse?.data.id}`,
         metadata: {
           orderId: orderResponse.data.id.toString(),
         },
