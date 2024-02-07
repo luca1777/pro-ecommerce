@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
+import { createOrder } from "@/app/utils";
 
 const stripeKey = `${process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!}`;
 const stripe = new Stripe(stripeKey);
@@ -37,16 +38,22 @@ export async function POST(request: NextRequest) {
         id:item.id,
         quantity: item.quantity
       }))
+
+      const orderResponse = await createOrder(formData, shorterListOfCartItems, subTotalCartPrice);
+
+      if (!orderResponse || !orderResponse.data) {
+        console.error("Failed to create order.");
+        return NextResponse.json({ error: "Failed to create order." }, { status: 500 });
+      }
   
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: lineItems,
         mode: "payment",
         cancel_url: `${host}`,
-        success_url: `${host}/success`,
+        success_url: `${host}/success/${orderResponse?.data.id}`,
         metadata: {
-          cartItems: JSON.stringify(shorterListOfCartItems),
-          formData: JSON.stringify(formData), 
+          orderId: orderResponse.data.id.toString(),
         },
       });
 

@@ -1,4 +1,4 @@
-import { createOrder } from "@/app/utils";
+import { createOrder, updateStatusOrder } from "@/app/utils";
 import Cors from "micro-cors";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
@@ -21,27 +21,14 @@ export async function POST(req: Request) {
 
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
+      
+      const orderId = session.metadata.orderId; 
 
-      const formData = JSON.parse(session.metadata.formData);
-
-      const cartItems = JSON.parse(session.metadata.cartItems);
-
-      if (!Array.isArray(cartItems)) {
-        console.error("cartItems nu este un array: ", cartItems);
-        return NextResponse.json(
-          { message: "cartItems nu este un array", ok: false },
-          { status: 500 }
-        );
-      }
-
-      const amountSubTotal = session.amount_total / 100 - 19.99;
-
-      const orderResponse = await createOrder(formData, cartItems, amountSubTotal);
-
-      if (orderResponse) {
-        console.log("Order created successfully", orderResponse.data);
+      const updateOrderResponse = await updateStatusOrder(orderId, "completed", true);
+      if (updateOrderResponse) {
+        console.log("Order updated successfully", updateOrderResponse);
       } else {
-        console.log("Error creating order");
+        console.log("Error updating order");
       }
     }
 
