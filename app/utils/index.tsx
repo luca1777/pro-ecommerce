@@ -198,7 +198,6 @@ export const getSingleProduct = async (prodId: number) => {
             }
         })
 
-
         return resData.data;
 
     }catch (error) {

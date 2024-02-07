@@ -34,6 +34,7 @@ export async function POST(request: NextRequest) {
         quantity: 1,
       });
 
+
       const shorterListOfCartItems = cartItems.map( item => ({
         id:item.id,
         quantity: item.quantity
