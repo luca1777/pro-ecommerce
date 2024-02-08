@@ -1,4 +1,4 @@
-import { createOrder, updateStatusOrder } from "@/app/utils";
+import { updateStatusOrder } from "@/app/utils";
 import Cors from "micro-cors";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
