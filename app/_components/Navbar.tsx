@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FaSearch } from "react-icons/fa";
 import { BsCart2 } from "react-icons/bs";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
@@ -11,12 +11,14 @@ import Image from "next/image";
 import Login from "./LoginModal";
 import { getTotalCartQuantity } from "../utils/cartUtils";
 import Cart from "./CartModal";
+import SearchBar from "./SearchBar";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [isModalLoginOpen, setModalLoginOpen] = useState(false);
   const [isModalCartOpen, setModalCartOpen] = useState(false);
   const [cartQuantity, setCartQuantity] = useState(0);
+  const router = useRouter();
 
   const pathname = usePathname();
   const isCheckoutPage = pathname === "/checkout";
@@ -47,6 +49,11 @@ const Navbar = () => {
 
   const handleNav = (): void => {
     setMenuOpen(!menuOpen);
+  };
+
+  const handleSearch = (query) => {
+    // Folosește router.push pentru a naviga către pagina de rezultate ale căutării
+    router.push(`/search?query=${encodeURIComponent(query)}`);
   };
 
   return (
@@ -94,16 +101,7 @@ const Navbar = () => {
               </ul>
             </div>
             <div className="hidden justify-center md:flex md:w-1/3">
-              <form className="w-max-[550px] relative w-full lg:w-80 xl:w-full">
-                <input
-                  type="text"
-                  placeholder="Search for products..."
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-black placeholder:text-gray-500"
-                />
-                <div className="absolute right-0 top-0 mr-3 flex h-full items-center text-gray-500 text-sm">
-                  <FaSearch />
-                </div>
-              </form>
+              <SearchBar />
             </div>
             <div className="flex justify-end md:w-1/3 gap-2">
               <button

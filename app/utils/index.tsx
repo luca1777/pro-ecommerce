@@ -22,14 +22,29 @@ export const getProducts = async () => {
             }
         })
         
-        // console.log("util : " + resData.data.id)
         return resData.data;
     }catch (e) {
         // console.log(e);
         return [];
     }
+} 
 
+export const getProductsByQuery = async (searchQuery) => {
 
+    try{
+        const resData = await axios.get(`${baseURL}/products`,{
+            params: {
+                consumer_key: username,
+                consumer_secret: password,
+                search: searchQuery
+            }
+        })
+        
+        return resData.data;
+    }catch (e) {
+        console.log(e);
+        return [];
+    }
 } 
 
 export const getProductsByPriceDesc = async (categorySlug) => {
