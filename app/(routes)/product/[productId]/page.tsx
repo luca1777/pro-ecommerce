@@ -6,7 +6,6 @@ import Link from "next/link";
 import AddToCartButton from "@/app/_components/AddToCartButton";
 import SizeSelectionBtn from "@/app/_components/SizeSelectionBtn";
 
-
 interface ProductProps {
   params: {
     productId: number;
@@ -19,6 +18,7 @@ interface ProductData {
   description: string;
   price: string;
   images: {
+    id: number;
     src: string;
   }[];
   attributes: {
@@ -63,46 +63,25 @@ const Product = async ({ params, searchParams }: ProductProps) => {
                 </div>
               </div>
             </div>
-            <div className="my-12 flex items-center justify-center gap-2 overflow-auto py-1 lg:mb-0">
-              <div className="mx-1 max-h-[10rem] max-w-[10rem]">
-                <Link href="/" className="h-full w-full">
-                  <div className="group flex h-full w-full items-center justify-center overflow-hidden rounded-lg bg-white hover:border-blue-600 border ring-2 ring-transparent hover:ring-blue-600">
-                    <Image
-                      className="relative h-full w-full object-contain transition duration-300 ease-in-out group-hover:scale-105"
-                      width={1000}
-                      height={100}
-                      src={dataProduct.images[0].src}
-                      alt="img"
-                    />
-                  </div>
-                </Link>
-              </div>
-              <div className="mx-1 max-h-[10rem] max-w-[10rem]">
-                <Link href="/" className="h-full w-full">
-                  <div className="group flex h-full w-full items-center justify-center overflow-hidden rounded-lg bg-white hover:border-blue-600 border ring-2 ring-transparent hover:ring-blue-600">
-                    <Image
-                      className="relative h-full w-full object-contain transition duration-300 ease-in-out group-hover:scale-105"
-                      width={1000}
-                      height={100}
-                      src={dataProduct.images[0].src}
-                      alt="img"
-                    />
-                  </div>
-                </Link>
-              </div>
-              <div className="mx-1 max-h-[10rem] max-w-[10rem]">
-                <Link href="/" className="h-full w-full">
-                  <div className="group flex h-full w-full items-center justify-center overflow-hidden rounded-lg bg-white hover:border-blue-600 border ring-2 ring-transparent hover:ring-blue-600">
-                    <Image
-                      className="relative h-full w-full object-contain transition duration-300 ease-in-out group-hover:scale-105"
-                      width={1000}
-                      height={100}
-                      src={dataProduct.images[0].src}
-                      alt="img"
-                    />
-                  </div>
-                </Link>
-              </div>
+            <div className="my-12 flex items-center justify-center gap-2 py-1 lg:mb-0">
+              <ul className="flex flex-wrap justify-center gap-2">
+                {dataProduct.images.map((img) => (
+                  <Link key={img.id} href="/">
+                    <li
+                      key={img.id}
+                      className="group h-[10rem] w-[8rem] sm:w-[10rem] flex items-center justify-center overflow-hidden rounded-lg bg-white hover:border-blue-600 border ring-1 ring-transparent hover:ring-blue-600"
+                    >
+                      <Image
+                        className="relative h-full w-full object-contain transition duration-300 ease-in-out group-hover:scale-105"
+                        width={1000}
+                        height={100}
+                        src={img.src}
+                        alt="img"
+                      />
+                    </li>
+                  </Link>
+                ))}
+              </ul>
             </div>
           </div>
           <div className="basis-full lg:basis-2/6">
@@ -176,5 +155,3 @@ const Product = async ({ params, searchParams }: ProductProps) => {
 };
 
 export default Product;
-
-
