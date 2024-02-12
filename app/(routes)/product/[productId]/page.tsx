@@ -1,10 +1,11 @@
 import React from "react";
 import { getSingleProduct, getProducts } from "@/app/utils";
 import Image from "next/image";
-import { IoMdArrowForward, IoMdArrowBack } from "react-icons/io";
 import Link from "next/link";
 import AddToCartButton from "@/app/_components/AddToCartButton";
 import SizeSelectionBtn from "@/app/_components/SizeSelectionBtn";
+import BulkProductImg from "@/app/_components/BulkProductImg";
+import ProductImg from "@/app/_components/ProductImg";
 
 interface ProductProps {
   params: {
@@ -37,52 +38,8 @@ const Product = async ({ params, searchParams }: ProductProps) => {
       <div className="mx-auto max-w-screen-2xl px-4">
         <div className="flex flex-col lg:flex-row rounded-lg border bg-white p-8 md:p-12 lg:gap-8">
           <div className="h-full w-full basis-full lg:basis-4/6">
-            <div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden">
-              <Image
-                className="h-full w-full object-contain"
-                width={1000}
-                height={1000}
-                src={dataProduct.images[0].src}
-                alt="img"
-              />
-              <div className="absolute bottom-[10%] flex w-full justify-center">
-                <div className="mx-aut flex h-11 items-center rounded-full border bg-neutral-50/70 text-neutral-500 backdrop-blur gap-8">
-                  <Link
-                    href="/"
-                    className="h-full px-6 transition-all ease-in-out hover:scale-110 hover:text-black flex items-center justify-center"
-                  >
-                    <IoMdArrowBack className="h-8 w-8" />
-                  </Link>
-                  <div className="mx-1 h-6 w-px bg-neutral-500"></div>
-                  <Link
-                    href="/"
-                    className="h-full px-6 transition-all ease-in-out hover:scale-110 hover:text-black flex items-center justify-center"
-                  >
-                    <IoMdArrowForward className="h-8 w-8" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-            <div className="my-12 flex items-center justify-center gap-2 py-1 lg:mb-0">
-              <ul className="flex flex-wrap justify-center gap-2">
-                {dataProduct.images.map((img) => (
-                  <Link key={img.id} href="/">
-                    <li
-                      key={img.id}
-                      className="group h-[10rem] w-[8rem] sm:w-[10rem] flex items-center justify-center overflow-hidden rounded-lg bg-white hover:border-blue-600 border ring-1 ring-transparent hover:ring-blue-600"
-                    >
-                      <Image
-                        className="relative h-full w-full object-contain transition duration-300 ease-in-out group-hover:scale-105"
-                        width={1000}
-                        height={100}
-                        src={img.src}
-                        alt="img"
-                      />
-                    </li>
-                  </Link>
-                ))}
-              </ul>
-            </div>
+            <ProductImg dataProduct={dataProduct} />
+            <BulkProductImg dataProduct={dataProduct} productId={productId} />
           </div>
           <div className="basis-full lg:basis-2/6">
             <div className="mb-6 flex flex-col border-b pb-6">
