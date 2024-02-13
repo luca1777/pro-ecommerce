@@ -3,13 +3,14 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { IoMdArrowBack, IoMdArrowForward } from "react-icons/io";
 import { useSearchParams, useRouter } from "next/navigation";
+import ModalZoomImg from "./ModalZoomImg";
 
 const ProductImg = ({ dataProduct }) => {
   const imgId = useSearchParams();
   const selectedImgId = imgId.get("imgId");
   const router = useRouter();
-
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (selectedImgId) {
@@ -38,15 +39,25 @@ const ProductImg = ({ dataProduct }) => {
     );
   };
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden">
-      <Image
-        className="h-full w-full object-contain"
-        width={1000}
-        height={1000}
-        src={dataProduct.images[currentImgIndex].src}
-        alt="Selected image"
-      />
+      <button onClick={openModal} className="h-full w-full object-contain">
+        <Image
+          className="h-full w-full object-contain"
+          width={1000}
+          height={1000}
+          src={dataProduct.images[currentImgIndex].src}
+          alt="Selected image"
+        />
+      </button>
       <div className="absolute bottom-[10%] flex w-full justify-center">
         <div className="mx-aut flex h-11 items-center rounded-full border bg-neutral-50/70 text-neutral-500 backdrop-blur gap-8">
           <button
@@ -64,10 +75,17 @@ const ProductImg = ({ dataProduct }) => {
           </button>
         </div>
       </div>
+      {isModalOpen && (
+        <ModalZoomImg
+          closeModal={closeModal}
+          dataProduct={dataProduct}
+          currentImgIndex={currentImgIndex}
+          goToPrevImg={goToPrevImg}
+          goToNextImg={goToNextImg}
+        />
+      )}
     </div>
   );
 };
 
 export default ProductImg;
-
-
