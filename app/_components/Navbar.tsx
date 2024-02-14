@@ -22,7 +22,8 @@ const Navbar = () => {
 
   const pathname = usePathname();
   const isCheckoutPage = pathname === "/checkout";
-  const isSuccessPage = pathname.startsWith('/success/') && pathname.split('/').length > 2;
+  const isSuccessPage =
+    pathname.startsWith("/success/") && pathname.split("/").length > 2;
 
   useEffect(() => {
     const updateCartQuantity = () => {
@@ -76,26 +77,18 @@ const Navbar = () => {
               <ul className="hidden md:flex gap-6 md:items-center text-sm">
                 <li>
                   <Link
-                    href="/category"
+                    href="/woman"
                     className="text-neutral-500 hover:text-black hover:underline"
                   >
-                    All
+                    Woman
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/"
+                    href="/man"
                     className="text-neutral-500 hover:text-black hover:underline"
                   >
-                    Shirts
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/"
-                    className="text-neutral-500 hover:text-black hover:underline"
-                  >
-                    Stickers
+                    Man
                   </Link>
                 </li>
               </ul>
@@ -142,41 +135,23 @@ const Navbar = () => {
               <AiOutlineClose className="text-lg" />
             </button>
             <div className="mb-4 w-full">
-              <form className="w-max-[550px] relative w-full lg:w-80 xl:w-full">
-                <input
-                  type="text"
-                  placeholder="Search for products..."
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-black placeholder:text-gray-500"
-                />
-                <div className="absolute right-0 top-0 mr-3 flex h-full items-center text-gray-500 text-sm">
-                  <FaSearch />
-                </div>
-              </form>
+              <SearchBar />
             </div>
             <ul className="flex w-full flex-col">
               <li className="py-2">
                 <Link
-                  href="/category"
-                  onClick={handleNav}
+                  href="/woman"
                   className="text-xl text-black hover:text-neutral-500 hover:underline"
                 >
-                  All
+                  Woman
                 </Link>
               </li>
               <li className="py-2">
                 <Link
-                  href="/"
+                  href="/man"
                   className="text-xl text-black hover:text-neutral-500 hover:underline"
                 >
-                  Shirts
-                </Link>
-              </li>
-              <li className="py-2">
-                <Link
-                  href="/"
-                  className="text-xl text-black hover:text-neutral-500 hover:underline"
-                >
-                  Stickers
+                  Man
                 </Link>
               </li>
             </ul>

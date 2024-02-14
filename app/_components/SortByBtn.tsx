@@ -3,7 +3,7 @@ import Link from 'next/link'
 import React, { useEffect, useRef, useState } from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
 
-const SortByBtn = ({ categorySlug }) => {
+const SortByBtn = ({ categorySlug, subCategorySlug }) => {
     const [showSort, setShowSort] = useState(false);
     const sortRef = useRef<HTMLDivElement>(null);
 
@@ -34,9 +34,9 @@ const SortByBtn = ({ categorySlug }) => {
         </button>
         {showSort && (
         <div className='absolute z-40 w-full rounded-b-md bg-white p-4 shadow-md'>
-          <Link className='mt-2 flex text-sm text-black hover:underline' href={`/category/${categorySlug}/new-in`}>New in</Link>
-          <Link className='mt-2 flex text-sm text-black hover:underline' href={`/category/${categorySlug}/price-asc`}>Price: Low to High</Link>
-          <Link className='mt-2 flex text-sm text-black hover:underline' href={`/category/${categorySlug}/price-desc`}>Price: High to Low</Link>
+          <Link className='mt-2 flex text-sm text-black hover:underline' href={`/${categorySlug}/${subCategorySlug}/new-in`}>New in</Link>
+          <Link className='mt-2 flex text-sm text-black hover:underline' href={`/${categorySlug}/${subCategorySlug}/price-asc`}>Price: Low to High</Link>
+          <Link className='mt-2 flex text-sm text-black hover:underline' href={`/${categorySlug}/${subCategorySlug}/price-desc`}>Price: High to Low</Link>
         </div>
       )}
   </div>

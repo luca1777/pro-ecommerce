@@ -204,6 +204,49 @@ export const getCategories = async () => {
     }
 };
 
+const getCategoryID = async (categoryName) => {
+    try {
+        const response = await axios.get(`${baseURL}/products/categories`, {
+            params: {
+                consumer_key: username,
+                consumer_secret: password,
+                search: categoryName, 
+            }
+        });
+
+        // Assuming the category name is unique and the first result is the correct one
+        const category = response.data.find(cat => cat.name.toLowerCase() === categoryName.toLowerCase());
+        return category ? category.id : null;
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
+};
+
+export const getSubcategories = async (parentCategory) => {
+    const womanCategoryId = await getCategoryID(parentCategory);
+    
+    if (womanCategoryId) {
+        try {
+            const response = await axios.get(`${baseURL}/products/categories`, {
+                params: {
+                    consumer_key: username,
+                    consumer_secret: password,
+                    parent: womanCategoryId, 
+                }
+            });
+            return response.data;
+        } catch (e) {
+            console.error(e);
+            return [];
+        }
+    } else {
+        console.log('Category "Woman" not found.');
+        return [];
+    }
+};
+
+
 export const getSingleProduct = async (prodId: number) => {
     try{
         const resData = await axios.get(`${baseURL}/products/${prodId}`,{

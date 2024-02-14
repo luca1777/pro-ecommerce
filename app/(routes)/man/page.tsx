@@ -1,14 +1,15 @@
 import React from 'react'
-import { getCategories, getProducts } from '@/app/utils';
+import { getProductsByCategorySlug, getSubcategories } from '@/app/utils';
 import Link from 'next/link';
 import Image from 'next/image';
 import SortByBtn from '@/app/_components/SortByBtn';
 import CategoriesBtn from '@/app/_components/CategoriesBtn';
 
-const AllProducts = async () => {
-    const data = await getProducts();
-    const categories = await getCategories();
-    const categorySlug = 'all';
+const WomanCategory = async () => {
+    const categorySlug = 'man';
+    const subCategorySlug = "man";
+    const subcategories = await getSubcategories(categorySlug);
+    const womanProducts = await getProductsByCategorySlug(categorySlug);
     
 
   return (
@@ -16,17 +17,17 @@ const AllProducts = async () => {
       <div className='w-full md:max-w-[125px] hidden md:block'>
         <p className='font-semibold pb-2'>Categories</p>
         <ul className="flex flex-col">
-          {categories.map((category) => (<li key={category.id} className='pb-2 hover:underline text-sm'><Link href={`/category/${category.slug}`}>{category.name}</Link></li>))}
+          {subcategories.map((subcategory) => (<li key={subcategory.id} className='pb-2 hover:underline text-sm'><Link href={`/${categorySlug}/${subcategory.slug}`}>{subcategory.name}</Link></li>))}
         </ul>
       </div>
       <div>
         <div className='flex w-full items-center justify-between gap-4'>
         <CategoriesBtn />
-        <SortByBtn categorySlug={categorySlug}/>
+        <SortByBtn categorySlug={categorySlug} subCategorySlug={subCategorySlug} />
         </div>
         <div className="pt-4 w-full">
           <ul className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {data?.map((product) => (
+            {womanProducts?.map((product) => (
               <li
                 key={product.id}
                 className="relative flex flex-col items-center justify-center pb-10"
@@ -57,4 +58,4 @@ const AllProducts = async () => {
   );
 }
 
-export default AllProducts;
+export default WomanCategory;
