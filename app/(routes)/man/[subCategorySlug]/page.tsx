@@ -1,31 +1,32 @@
 import React from 'react'
-import { getCategories, getProductsByPriceAsc } from '@/app/utils';
+import { getCategories, getProductsByCategorySlug, getSubcategories } from '@/app/utils';
 import Link from 'next/link';
 import Image from 'next/image';
 import SortByBtn from '@/app/_components/SortByBtn';
 import CategoriesBtn from '@/app/_components/CategoriesBtn';
 
-const ProductPriceAsc = async ({ params }) => {
-    const categorySlug = params?.categorySlug;
-    const data = await getProductsByPriceAsc(categorySlug);
-    const categories = await getCategories();
-
+const WomanSubCategory = async ({ params }) => {
+    const categorySlugParams = params.subCategorySlug;
+    const productsByCategory = await getProductsByCategorySlug(categorySlugParams);
+    const categorySlug = 'man';
+    const subcategories = await getSubcategories(categorySlug);
+    
   return (
     <div className="mx-auto flex flex-col gap-8 px-4 pb-4 text-black md:flex-row max-w-screen-2xl border-b border-gray-300">
       <div className='w-full md:max-w-[125px] hidden md:block'>
         <p className='font-semibold pb-2'>Categories</p>
         <ul className="flex flex-col">
-          {categories.map((category) => (<li key={category.id} className='pb-2 hover:underline text-sm'><Link href={`/category/${category.slug}`}>{category.name}</Link></li>))}
+        {subcategories.map((subcategory) => (<li key={subcategory.id} className='pb-2 hover:underline text-sm'><Link href={`/${categorySlug}/${subcategory.slug}`}>{subcategory.name}</Link></li>))}
         </ul>
       </div>
       <div>
         <div className='flex w-full items-center justify-between gap-4'>
-        <CategoriesBtn />
-        <SortByBtn  categorySlug={categorySlug}/>
+        <CategoriesBtn subcategories={subcategories} categorySlug={categorySlug}/>
+        <SortByBtn subCategorySlug={categorySlugParams} categorySlug={categorySlug}/>
         </div>
         <div className="pt-4 w-full">
           <ul className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {data?.map((product) => (
+            {productsByCategory?.map((product) => (
               <li
                 key={product.id}
                 className="relative flex flex-col items-center justify-center pb-10"
@@ -56,4 +57,4 @@ const ProductPriceAsc = async ({ params }) => {
   );
 }
 
-export default ProductPriceAsc;
+export default WomanSubCategory;
