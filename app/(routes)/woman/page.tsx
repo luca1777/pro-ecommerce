@@ -22,7 +22,7 @@ const WomanCategory = async () => {
       </div>
       <div>
         <div className='flex w-full items-center justify-between gap-4'>
-        <CategoriesBtn />
+        <CategoriesBtn subcategories={subcategories} categorySlug={categorySlug}/>
         <SortByBtn categorySlug={categorySlug} subCategorySlug={subCategorySlug}/>
         </div>
         <div className="pt-4 w-full">

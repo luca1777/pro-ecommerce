@@ -4,12 +4,20 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaSearch } from "react-icons/fa";
 
-const SearchBar = () => {
+interface SearchBarProps {
+  setMenuOpen?: (open: boolean) => void;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({ setMenuOpen }) => {
   const [query, setQuery] = useState("");
   const router = useRouter();
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (typeof setMenuOpen === 'function') {
+      setMenuOpen(false);
+    }
 
     const encodedSearchQuery = encodeURI(query);
     router.push(`/search?q=${encodedSearchQuery}`);

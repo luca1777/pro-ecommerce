@@ -7,7 +7,6 @@ import CategoriesBtn from '@/app/_components/CategoriesBtn';
 
 const ProductPriceDesc = async ({ params }) => {
     const categorySlug = params?.subCategorySlug;
-    console.log(categorySlug)
     const data = await getProductsByPriceDesc(categorySlug);
     const categorySlugMan = 'man';
     const subcategories = await getSubcategories(categorySlugMan);
@@ -22,7 +21,7 @@ const ProductPriceDesc = async ({ params }) => {
       </div>
       <div>
         <div className='flex w-full items-center justify-between gap-4'>
-        <CategoriesBtn />
+        <CategoriesBtn subcategories={subcategories} categorySlug={categorySlug} />
         <SortByBtn  subCategorySlug={categorySlug} categorySlug={categorySlugMan}/>
         </div>
         <div className="pt-4 w-full">

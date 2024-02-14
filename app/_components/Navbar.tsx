@@ -2,7 +2,6 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { FaSearch } from "react-icons/fa";
 import { BsCart2 } from "react-icons/bs";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { FaRegUser } from "react-icons/fa6";
@@ -30,11 +29,8 @@ const Navbar = () => {
       const totalQuantity = getTotalCartQuantity();
       setCartQuantity(totalQuantity);
     };
-    // Event listener for cart updates
     window.addEventListener("cartUpdated", updateCartQuantity);
-    // Initial cart quantity update
     updateCartQuantity();
-    // Cleanup
     return () => {
       window.removeEventListener("cartUpdated", updateCartQuantity);
     };
@@ -52,10 +48,6 @@ const Navbar = () => {
     setMenuOpen(!menuOpen);
   };
 
-  const handleSearch = (query) => {
-    // Folosește router.push pentru a naviga către pagina de rezultate ale căutării
-    router.push(`/search?query=${encodeURIComponent(query)}`);
-  };
 
   return (
     <>
@@ -135,13 +127,15 @@ const Navbar = () => {
               <AiOutlineClose className="text-lg" />
             </button>
             <div className="mb-4 w-full">
-              <SearchBar />
+              <SearchBar setMenuOpen={setMenuOpen} />
             </div>
             <ul className="flex w-full flex-col">
               <li className="py-2">
                 <Link
                   href="/woman"
                   className="text-xl text-black hover:text-neutral-500 hover:underline"
+                  onClick={() => setMenuOpen(false)}
+
                 >
                   Woman
                 </Link>
@@ -150,6 +144,7 @@ const Navbar = () => {
                 <Link
                   href="/man"
                   className="text-xl text-black hover:text-neutral-500 hover:underline"
+                  onClick={() => setMenuOpen(false)}
                 >
                   Man
                 </Link>
