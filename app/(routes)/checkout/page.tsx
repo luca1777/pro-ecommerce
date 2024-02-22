@@ -172,7 +172,7 @@ const CheckoutPage = () => {
     <div className="border-b border-gray-300">
       <header className="w-full h-[90px] border-b border-gray-300 flex items-center justify-center bg-white">
         <Link href="/">
-          <Image className="h-12 w-16" src={Logo} alt="logo" />
+          <Image width={180} height={80} src={Logo} alt="logo" />
         </Link>
       </header>
       <div className="max-w-screen-xl mx-auto bg-white border-l border-gray-300">

@@ -33,6 +33,10 @@ const Product = async ({ params, searchParams }: ProductProps) => {
   const data = await getProducts();
   const dataSizes = dataProduct.attributes[0]?.options;
 
+  const removeHtmlTags = (str) => {
+    return str.replace(/<[^>]*>/g, '');
+  }
+
   return (
     <div>
       <div className="mx-auto max-w-screen-2xl px-4">
@@ -43,7 +47,7 @@ const Product = async ({ params, searchParams }: ProductProps) => {
           </div>
           <div className="basis-full lg:basis-2/6">
             <div className="mb-6 flex flex-col border-b pb-6">
-              <h1 className="mb-2 text-5xl font-semibold">
+              <h1 className="mb-2 text-3xl font-semibold">
                 {dataProduct.name}
               </h1>
               <div className="mr-auto w-auto rounded-full bg-blue-600 p-2 text-md text-white">
@@ -61,7 +65,7 @@ const Product = async ({ params, searchParams }: ProductProps) => {
                 <SizeSelectionBtn dataSizes={dataSizes} productId={productId} />
               </div>
               <div className="mx-auto font-medium mb-6">
-                60% combed ringspun cotton/40% polyester jersey tee.
+                <p>{removeHtmlTags(dataProduct.description)}</p>
               </div>
               <AddToCartButton product={dataProduct} />
             </div>
