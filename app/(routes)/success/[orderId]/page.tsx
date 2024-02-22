@@ -50,7 +50,7 @@ const Success = async ({ params }) => {
           <div className="p-5 lg:w-3/5 lg:border-r lgborder-l border-gray-300 bg-white">
             <header className="w-full h-[90px] lg:border-b border-gray-300 flex items-center justify-center bg-white">
               <Link href="/">
-                <Image height={48} width={64} src={Logo} alt="logo" />
+                <Image height={80} width={180} src={Logo} alt="logo" />
               </Link>
             </header>
             <SuccessOrderSummary dataOrder={dataOrder} />

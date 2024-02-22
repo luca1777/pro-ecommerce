@@ -12,7 +12,7 @@ const Footer = () => {
             href="/"
             className="flex w-full items-center md:w-auto md:justify-center"
           >
-            <Image className="h-10 w-14" src={Logo} alt="logo" />
+            <Image width={180} height={80} src={Logo} alt="logo" />
           </Link>
         </div>
         <nav>

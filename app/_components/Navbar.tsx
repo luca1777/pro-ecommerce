@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { BsCart2 } from "react-icons/bs";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { FaRegUser } from "react-icons/fa6";
@@ -17,7 +17,6 @@ const Navbar = () => {
   const [isModalLoginOpen, setModalLoginOpen] = useState(false);
   const [isModalCartOpen, setModalCartOpen] = useState(false);
   const [cartQuantity, setCartQuantity] = useState(0);
-  const router = useRouter();
 
   const pathname = usePathname();
   const isCheckoutPage = pathname === "/checkout";
@@ -48,11 +47,10 @@ const Navbar = () => {
     setMenuOpen(!menuOpen);
   };
 
-
   return (
     <>
       {!isCheckoutPage && !isSuccessPage && (
-        <nav className="relative flex items-center justify-between p-4">
+        <nav className="relative flex items-center justify-between p-4 shadow-md mb-10">
           <div onClick={handleNav} className="block flex-none md:hidden">
             <button className="flex h-11 w-11 items-center justify-center rounded-md border border-gray-300 text-black transition-colors active:bg-gray-400">
               <AiOutlineMenu className="transition-all ease-in-out hover:scale-125" />
@@ -64,7 +62,12 @@ const Navbar = () => {
                 href="/"
                 className="flex md:mr-6 w-full items-center md:w-auto justify-center text-2xl font-extrabold"
               >
-                <Image className="h-10 w-14" src={Logo} alt="logo" />
+                <Image
+                  width={180} // Aceste valori ar trebui să corespundă cu dimensiunile container-ului
+                  height={80}
+                  src={Logo}
+                  alt="logo"
+                />
               </Link>
               <ul className="hidden md:flex gap-6 md:items-center text-sm">
                 <li>
@@ -81,6 +84,14 @@ const Navbar = () => {
                     className="text-neutral-500 hover:text-black hover:underline"
                   >
                     Man
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/"
+                    className="text-neutral-500 hover:text-black hover:underline"
+                  >
+                    Contact
                   </Link>
                 </li>
               </ul>
@@ -135,7 +146,6 @@ const Navbar = () => {
                   href="/woman"
                   className="text-xl text-black hover:text-neutral-500 hover:underline"
                   onClick={() => setMenuOpen(false)}
-
                 >
                   Woman
                 </Link>
@@ -147,6 +157,15 @@ const Navbar = () => {
                   onClick={() => setMenuOpen(false)}
                 >
                   Man
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/"
+                  className="text-xl text-black hover:text-neutral-500 hover:underline"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Contact
                 </Link>
               </li>
             </ul>
