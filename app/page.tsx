@@ -1,48 +1,53 @@
+"use client";
 import React from "react";
-import TShirt from "./assets/tricou-tommy.webp";
+import WomanImg from "@/app/assets/woman-home.jpg";
+import ManImg from "@/app/assets/man-home.jpg";
 import Link from "next/link";
 import Image from "next/image";
-import { getProducts } from "@/app/utils";
 
-const Home = async () => {
-  const data = await getProducts();
-
+const Home = () => {
   return (
     <main>
-      {/* Hero section*/}
-      <div className="mx-auto grid max-w-screen-2xl gap-4 pb-4 px-4 md:grid-cols-6 md:grid-rows-2">
-        <div className="md:col-span-4 md:row-span-2 overflow:hidden">
-          <Link href="/" className="relative block aspect-square h-full w-full">
-            <div className="h-full w-full overflow-hidden rounded-lg border hover:border-blue-600">
+      <div className="flex flex-col lg:flex-row w-full justify-center lg:gap-8 gap-4">
+        <div className="w-full">
+          <div className="group flex flex-col relative h-[400px] md:h-[700px]">
+            <Link href="/woman">
               <Image
-                src={TShirt}
-                alt="t-shirt"
-                className="relative h-full w-full object-contain transition duration-300 ease-in-out hover:scale-105"
+                layout="fill"
+                objectFit="cover"
+                src={WomanImg}
+                alt="woman-img-home"
+                className="duration-300 group-hover:scale-105"
               />
-            </div>
-          </Link>
+            </Link>
+          </div>
+          <div className="w-full h-32 flex justify-center items-center">
+            <Link href="/woman">
+              <button className="text-white border border-black bg-black py-4 px-12 text-2xl tracking-widest font-black transition-colors duration-300 ease-in-out hover:bg-white hover:text-black">
+                WOMAN
+              </button>
+            </Link>
+          </div>
         </div>
-        <div className="md:col-span-2 md:row-span-1 overflow:hidden">
-          <Link href="/" className="relative block aspect-square h-full w-full">
-            <div className="h-full w-full overflow-hidden rounded-lg border hover:border-blue-600">
+        <div className="w-full">
+          <div className="group relative h-[400px] md:h-[700px]">
+            <Link href="/man">
               <Image
-                src={TShirt}
-                alt="t-shirt"
-                className="relative h-full w-full object-contain transition duration-300 ease-in-out hover:scale-105"
+                layout="fill"
+                objectFit="cover"
+                src={ManImg}
+                alt="man-img-home"
+                className="relative duration-300 group-hover:scale-105"
               />
-            </div>
-          </Link>
-        </div>
-        <div className="md:col-span-2 md:row-span-1 overflow:hidden">
-          <Link href="/" className="relative block aspect-square h-full w-full">
-            <div className="h-full w-full overflow-hidden rounded-lg border hover:border-blue-600">
-              <Image
-                src={TShirt}
-                alt="t-shirt"
-                className="relative h-full w-full object-contain transition duration-300 ease-in-out hover:scale-105"
-              />
-            </div>
-          </Link>
+            </Link>
+          </div>
+          <div className="w-full h-32 flex justify-center items-center">
+            <Link href="/man">
+              <button className="text-white border border-black bg-black py-4 px-12 text-2xl tracking-widest font-black transition-colors duration-300 ease-in-out hover:bg-white hover:text-black">
+                MAN
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
     </main>
